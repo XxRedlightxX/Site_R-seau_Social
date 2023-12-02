@@ -1,0 +1,64 @@
+﻿@model IEnumerable<CrossConvo.Models.Utilisateur>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/PageExplorer.css">
+    <link rel="stylesheet" href="~/css/lightbox.css">
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <script src="~/js/switch_theme.js"></script>
+    <title>Explorer Page</title>
+</head>
+<body>
+    
+
+    <header>
+        <h1>Explorer</h1>
+        <h3>Recherche</h3>
+
+        <form action="~/Utilisateurs/Search" method="POST">
+            <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
+            <input type="submit" value="Rechercher" />
+        </form>
+    </header>
+    <div class="container">
+        <div class="gallery">
+            <a href="~/img/home/mariage.jpeg" data-lightbox="models" data-title="Caption1">
+                <div class="image">
+                    <img src="~/img/home/mariage.jpeg" alt="Image 1">
+                    <p>J'adore les animaux</p>
+                    <p>Ema</p>
+                </div>
+            </a>
+            <a href="~/img/home/hiking.jpg" data-lightbox="models" data-title="Caption1">
+                <div class="image">
+                    <img src="~/img/home/hiking.jpg" alt="Image 1">
+                    <p>J'adore les Bangalas, </p>
+                    <p>Ema</p>
+                </div>
+            </a>
+            <a href="~/img/home/Ocean.jpeg" data-lightbox="models" data-title="Caption1">
+                <div class="image">
+                    <img src="~/img/home/Ocean.jpeg" alt="Image 1">
+                    <p>J'adore les animaux</p>
+                    <p>Ema</p>
+                </div>
+            </a>
+            <a href="~/img/home/gympic.jpeg" data-lightbox="models" data-title="Caption1">
+                <div class="image">
+                    <img src="~/img/home/gympic.jpeg" alt="Image 1">
+                    <p>J'adore les animaux</p>
+                    <p>Ema</p>
+                </div>
+            </a>
+
+
+    
+        
+    </main>
+            <script src="~/js/lightbox-plus-jquery.js"></script>
+</body>
+</html>
+

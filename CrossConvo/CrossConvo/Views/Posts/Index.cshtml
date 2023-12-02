@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CrossConvo.Models.Post>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<script src="~/js/switch_theme.js"></script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+
+
+</head>
+<body>
+
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <div class="entity-container">
+        @foreach (var item in Model)
+        {
+            <div class="entity-card">
+                <strong>@Html.DisplayFor(modelItem => item.Title)</strong><br />
+                Date de publication: @Html.DisplayFor(modelItem => item.PublicationDate)<br />
+                Email: @Html.DisplayFor(modelItem => item.Utilisateur.Email)<br />
+                Contenu: @Html.DisplayFor(modelItem => item.Contenu)<br />
+                @Html.DisplayFor(modelItem => item.Likes) likes<br />
+                <div>
+                    <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PostId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>
+
+

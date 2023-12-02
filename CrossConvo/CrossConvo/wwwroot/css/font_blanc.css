@@ -1,0 +1,15 @@
+﻿body {
+    background-color: #e3d5c3;
+}
+
+.container {
+    background-color: #f0e7db;
+}
+
+h3, p, h2 .petit{
+    color: black;
+}
+
+hr {
+    border: 10px solid #59320b;
+}

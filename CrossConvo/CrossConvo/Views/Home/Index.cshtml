@@ -1,0 +1,60 @@
+﻿﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <script src="~/js/switch_theme.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+    <div class="theme-bouton">
+        <button class="theme" onclick="changerCouleurTheme()"><i class="fas fa-sun" id="theme-icon"></i></button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>CHAT N'IMPORTE OÙ, LÀ OÙ TU VEUX, AVEC <span style="color: #f33722;">CrossConvo.</span></h3>
+            <h5><span style="color:#017878;">Une plateforme polyvalente pour la communication et la collaboration</span></h5>
+        </div>
+        <div class="col-md-3 image">
+            <img src="~/img/home/logo.png" style="height: 140px; " class="" alt="logo">
+        </div>
+    </div>
+
+
+    <button class="bouton-plus">Voir plus</button>
+
+    <h2 style="text-align: center; font-weight: bold; padding-top: 100px">VOUS POUVEZ</h2>
+    <div class="row" style="padding-top: 20px">
+        <div class="col-md-4">
+            <i class="fas fa-comment icon1"></i>
+            <i class="far fa-heart icon11"></i>
+            <p>Commenter et répondre aux publications des autres. Montrer vos appréciations dans des publications</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-user-friends icon2"></i>
+            <p>Se connecter avec d'autres personnes en ligne en les ajoutant comme amis et les contacter</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-share-square icon3"></i>
+            <p>Publier du texte, des images, des vidéos pour mettre à jour vos amis ou abonnés</p>
+        </div>
+    </div>
+    <hr>
+    <div style="padding-top: 40px; padding-bottom: 40px;">
+        <img src="~/img/home/personne3.png" class="image1" style="width: 70%; margin: 0 auto; display: block;" alt="Personne text">
+    </div>
+
+    <div>
+        <p>
+            CrossConvo révolutionne la communication et la collaboration en éliminant les barrières géographiques.
+            Cette plateforme polyvalente offre une interface intuitive, des fonctionnalités robustes, des réunions virtuelles,
+            une messagerie instantanée et la gestion de projets, adaptée à tous.
+        </p>
+    </div>
+    <hr>
+</body>
+</html>

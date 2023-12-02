@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CrossConvo.Models.GroupeUtilisateur>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<script src="~/js/switch_theme.js"></script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    
+
+</head>
+<body>
+
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <div class="entity-container">
+        @foreach (var item in Model)
+        {
+            <div class="entity-card">
+                Fait parti(e) du groupe: ID: @Html.DisplayFor(modelItem => item.Groupe.GroupeId) NOM: @Html.DisplayFor(modelItem => item.Groupe.Nom)<br />
+                Username utilisateur: @Html.DisplayFor(modelItem => item.Utilisateur.Username)<br />
+                Email de l'utisateur: @Html.DisplayFor(modelItem => item.Utilisateur.Email)<br />
+                <div>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>
+
+

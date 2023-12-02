@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CrossConvo.Models.Utilisateur>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<script src="~/js/switch_theme.js"></script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+
+
+</head>
+<body>
+
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <h1>Recherche</h1>
+
+    <form asp-controller="Utilisateurs" asp-action="Search" method="POST">
+        <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
+        <input type="submit" value="Rechercher" />
+    </form>
+
+    <div class="entity-container">
+        @foreach (var item in Model)
+        {
+            <div class="entity-card">
+                <strong>@Html.DisplayFor(modelItem => item.Nom) @Html.DisplayFor(modelItem => item.Prenom)</strong><br />
+                Username: @Html.DisplayFor(modelItem => item.Username)<br />
+                Email: @Html.DisplayFor(modelItem => item.Email)<br />
+                Password: @Html.DisplayFor(modelItem => item.Password)<br />
+                <div>
+                    <a asp-action="Edit" asp-route-id="@item.UtilisateurId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.UtilisateurId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.UtilisateurId">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>

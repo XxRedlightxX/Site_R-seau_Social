@@ -1,0 +1,22 @@
+﻿﻿table, th, td {
+    background-color: white;
+}
+
+label, h1, h3, h4, dd, dt {
+    color: #EE992C;
+}
+
+.entity-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
+    width: 45%;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+    .entity-card:nth-child(2n+1) {
+        clear: left;
+    }
