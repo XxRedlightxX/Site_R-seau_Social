@@ -1,5 +1,6 @@
 ﻿using CrossConvo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CrossConvoApp.Controllers
@@ -26,10 +27,15 @@ namespace CrossConvoApp.Controllers
             return View();
         }
 
-        public IActionResult ExplorerPage()
+        public async Task<IActionResult> ExplorerPage()
         {
-            return View();
+            var applicationDbContext = _context.Posts.Include(p => p.Utilisateur);
+            return View(await applicationDbContext.ToListAsync());
+
+
         }
+
+
 
 
 
