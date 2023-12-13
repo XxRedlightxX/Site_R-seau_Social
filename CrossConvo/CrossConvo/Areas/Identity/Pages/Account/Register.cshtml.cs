@@ -70,13 +70,21 @@ namespace CrossConvo.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Nom")]
+            public string Nom { get; set; }
+
+            [Required]
+            [Display(Name = "Prénom")]
+            public string Prénom { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "L'adresse e-mail est obligatoire.")]
-            [EmailAddress(ErrorMessage = "L'adresse e-mail n'est pas valide.")]
-            [Display(Name = "Adresse e-mail")]
+            [Required]
+            [EmailAddress]
+            [Display(Name = "Email")]
             public string Email { get; set; }
 
             /// <summary>
@@ -98,14 +106,11 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required(ErrorMessage = "Le numéro de téléphone est obligatoire.")]
-            [Phone(ErrorMessage = "Le numéro de téléphone n'est pas valide.")]
-            [RegularExpression(@"^1\d{10}$", ErrorMessage = "Le format du numéro de téléphone doit être 1 suivi de 10 chiffres.")]
-            [Display(Name = "Numéro de téléphone")]
-            public string PhoneNumber { get; set; }
-
-            public bool TwoFactorEnabled { get; set; }
-            public bool PhoneNumberConfirmed { get; set; }
+            [Required]
+            [StringLength(10), MinLength(10)]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Téléphone")]
+            public string Téléphone { get; set; }
         }
 
 
@@ -186,4 +191,5 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
     }
+
 }

@@ -174,7 +174,9 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             var authenticatorCode = Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
             // Tente de valider le code d'authentification à deux facteurs en utilisant le gestionnaire d'authentification
-            var result = await _signInManager.TwoFactorSignInAsync(Input.TwoFactAuthProviderName, authenticatorCode, rememberMe, Input.RememberMachine);
+            var result = await 
+                _signInManager.TwoFactorSignInAsync(Input.TwoFactAuthProviderName,
+                authenticatorCode, rememberMe, Input.RememberMachine);
 
             // Récupère l'ID de l'utilisateur
             var userId = await _userManager.GetUserIdAsync(user);

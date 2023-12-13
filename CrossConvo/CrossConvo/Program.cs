@@ -3,7 +3,6 @@ using CrossConvo.Models;
 using Microsoft.AspNetCore.Identity;
 using CrossConvo.Settings;
 using CrossConvo.Service;
-using Microsoft.Extensions.DependencyInjection;
 //using CrossConvo.Hub.CrossConvo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,12 +23,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders(); ;
+
+/*
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+*/
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("TwilioSettings"));
 
 
