@@ -10,7 +10,8 @@
     <title>Explorer Page</title>
 </head>
 <body>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
     <header>
         <h1>Explorer</h1>
@@ -24,19 +25,29 @@
     <div class="container">
 
         <div class="gallery">
-            <a href="~/img/home/mariage.jpeg" data-lightbox="models" data-title="Caption1">
+            
                 @foreach (var item in Model)
                 {
                     <div class="image">
                         <img src="~/img/home/hiking.jpg" alt="Image 1">
                         <p>@Html.DisplayFor(modelItem => item.Likes)</p>
-                        <p>@Html.DisplayFor(modelItem => item.Utilisateur.Nom)</p>
+                    <a href="~/Home/Profil/@item.UtilisateurId"><h5><b>Titre : </b>@Html.DisplayFor(modelItem => item.Utilisateur.Nom)</h5></a>
+                        
+                        <button onclick="incrementLikes()">Like</button>
 
 
 
                     </div>
+
+
+                @foreach( var ite in Model)
+                {
+                    <a href="~/Home/Details/@ite.UtilisateurId">try</a>
+                    
                 }
-            </a>
+
+
+            }
         </div>
     </div>
 
@@ -45,5 +56,23 @@
 
     </main>
     <script src="~/js/lightbox-plus-jquery.js"></script>
+
+    <script>
+        function incrementLikes() {
+            // Use AJAX to call the method in the controller
+            $.ajax({
+                url: '@Url.Action("IncrementLikes", "HomeController")', // Replace with your controller and action names
+                type: 'GET',
+                success: function () {
+                    // Reload the page to update the like count
+                    location.reload();
+                },
+                error: function () {
+                    // Handle error if any
+                    alert('Error incrementing likes.');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

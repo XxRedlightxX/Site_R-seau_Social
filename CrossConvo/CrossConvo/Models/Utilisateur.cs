@@ -48,7 +48,7 @@ namespace CrossConvo.Models
         public virtual ICollection<GroupeUtilisateur>? GroupesUtilisateurs { get; set; }
         
         public virtual ICollection<Ami>? Amis { get; set; }
-        
+        [NotMapped]
         public virtual ICollection<Post>? Posts { get; set; }
 
         public virtual ICollection<Commentaire>? Commentaires { get; set; }
