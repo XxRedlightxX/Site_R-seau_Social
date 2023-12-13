@@ -43,6 +43,10 @@ namespace CrossConvo.Models
                 .WithMany(u => u.Amis)
                 .HasForeignKey(ami => ami.UtilisateurId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+
+           
+
         }
 
         public void SeedData()
