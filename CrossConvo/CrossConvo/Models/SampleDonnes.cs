@@ -18,7 +18,6 @@ namespace CrossConvo.Models
             {
                 Nom = "LaBaie",
                 Prenom = "Ariel",
-                Username = "ariel1234",
                 Email = "ariel1234@gmail.com",
                 Password = "ariel1234",
                 Amis = new List<Ami>(),
@@ -29,7 +28,7 @@ namespace CrossConvo.Models
             {
                 Nom = "LaRouge",
                 Prenom = "Amanda",
-                Username = "amanda1234",
+                
                 Email = "amanda1234@gmail.com",
                 Password = "amandal1234",
                 Amis = new List<Ami>(),
@@ -41,7 +40,7 @@ namespace CrossConvo.Models
             {
                 Nom = "LaRouge",
                 Prenom = "Amanda",
-                Username = "amanda1234",
+                UsernameAmi = "amanda1234",
                 Email = "amanda1234@gmail.com"
             });
 

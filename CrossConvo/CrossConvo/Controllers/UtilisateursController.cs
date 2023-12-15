@@ -35,7 +35,7 @@ namespace CrossConvoApp.Controllers
             }
 
             var utilisateur = await _context.Utilisateurs
-                .FirstOrDefaultAsync(m => m.UtilisateurId == id);
+                .FirstOrDefaultAsync(m => m.UtilisateurId.Equals(id));
             if (utilisateur == null)
             {
                 return NotFound();
@@ -55,7 +55,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UtilisateurId,Nom,Prenom,Username,Email,Password")] Utilisateur utilisateur)
+        public async Task<IActionResult> Create([Bind("UtilisateurId,Nom,Prenom,Email,Password")] Utilisateur utilisateur)
         {
             if (ModelState.IsValid)
             {
@@ -87,9 +87,9 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UtilisateurId,Nom,Prenom,Username,Email,Password")] Utilisateur utilisateur)
+        public async Task<IActionResult> Edit(int id, [Bind("UtilisateurId,Nom,Prenom,Email,Password")] Utilisateur utilisateur)
         {
-            if (id != utilisateur.UtilisateurId)
+            if (id!.Equals(utilisateur.UtilisateurId))
             {
                 return NotFound();
             }
@@ -117,6 +117,8 @@ namespace CrossConvoApp.Controllers
             return View(utilisateur);
         }
 
+        
+
         // GET: Utilisateurs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -126,7 +128,7 @@ namespace CrossConvoApp.Controllers
             }
 
             var utilisateur = await _context.Utilisateurs
-                .FirstOrDefaultAsync(m => m.UtilisateurId == id);
+                .FirstOrDefaultAsync(m => m.UtilisateurId.Equals(id));
             if (utilisateur == null)
             {
                 return NotFound();
@@ -154,16 +156,16 @@ namespace CrossConvoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UtilisateurExists(int id)
+        private bool UtilisateurExists(string id)
         {
-            return (_context.Utilisateurs?.Any(e => e.UtilisateurId == id)).GetValueOrDefault();
+            return (_context.Utilisateurs?.Any(e => e.UtilisateurId.Equals(id))).GetValueOrDefault();
         }
 
         [HttpPost]
         public async Task<ActionResult> Search(string searchName)
         {
             // Recherche des livres en fonction du nom du livre ou de la catégorie
-            var result = await _context.Utilisateurs.Where(p => p.Username.Contains(searchName)).ToListAsync();
+            var result = await _context.Utilisateurs.Where(p => p.Nom.Contains(searchName)).ToListAsync();
             return View("UtilisateurSearch", result);
         }
 

@@ -7,7 +7,7 @@ namespace CrossConvo.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int GroupeId { get; set; }
+        public string GroupeId { get; set; }
 
         [DataType(DataType.Text)]
         [Column(TypeName = "VARCHAR")]
@@ -16,5 +16,8 @@ namespace CrossConvo.Models
         public string Nom { get; set; }
 
         public virtual ICollection<GroupeUtilisateur>? GroupesUtilisateurs { get; set; }
+
+       
     }
 }
+

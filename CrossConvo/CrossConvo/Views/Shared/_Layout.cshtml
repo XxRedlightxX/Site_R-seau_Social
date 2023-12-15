@@ -31,9 +31,8 @@
 
                         @{
                             string connection = null;
-                            string userName = HttpContextAccessor.HttpContext.Session.GetString("userName");
-                        }
-                        @if (connection != null || !string.IsNullOrEmpty(userName))
+                       }
+                        @if (connection != null)
                         {
                             <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
                                 @Html.ActionLink("", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })

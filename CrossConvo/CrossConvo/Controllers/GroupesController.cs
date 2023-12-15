@@ -35,7 +35,7 @@ namespace CrossConvoApp.Controllers
             }
 
             var groupe = await _context.Groupes
-                .FirstOrDefaultAsync(m => m.GroupeId == id);
+                .FirstOrDefaultAsync(m => m.GroupeId.Equals(id));
             if (groupe == null)
             {
                 return NotFound();
@@ -89,7 +89,7 @@ namespace CrossConvoApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GroupeId,Nom")] Groupe groupe)
         {
-            if (id != groupe.GroupeId)
+            if (id!.Equals( groupe.GroupeId))
             {
                 return NotFound();
             }
@@ -126,7 +126,7 @@ namespace CrossConvoApp.Controllers
             }
 
             var groupe = await _context.Groupes
-                .FirstOrDefaultAsync(m => m.GroupeId == id);
+                .FirstOrDefaultAsync(m => m.GroupeId.Equals( id));
             if (groupe == null)
             {
                 return NotFound();
@@ -154,9 +154,9 @@ namespace CrossConvoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupeExists(int id)
+        private bool GroupeExists(string id)
         {
-            return (_context.Groupes?.Any(e => e.GroupeId == id)).GetValueOrDefault();
+            return (_context.Groupes?.Any(e => e.GroupeId.Equals( id))).GetValueOrDefault();
         }
     }
 }

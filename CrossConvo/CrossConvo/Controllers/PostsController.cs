@@ -35,7 +35,7 @@ namespace CrossConvoApp.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Utilisateur)
-                .FirstOrDefaultAsync(m => m.PostId == id);
+                .FirstOrDefaultAsync(m => m.PostId.Equals(id));
             if (post == null)
             {
                 return NotFound();
@@ -92,7 +92,7 @@ namespace CrossConvoApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,PublicationDate,UtilisateurId,Contenu,Likes")] Post post)
         {
-            if (id != post.PostId)
+            if (id!.Equals(post.PostId))
             {
                 return NotFound();
             }
@@ -131,7 +131,7 @@ namespace CrossConvoApp.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Utilisateur)
-                .FirstOrDefaultAsync(m => m.PostId == id);
+                .FirstOrDefaultAsync(m => m.PostId.Equals(id));
             if (post == null)
             {
                 return NotFound();
@@ -159,9 +159,9 @@ namespace CrossConvoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PostExists(int id)
+        private bool PostExists(string id)
         {
-            return (_context.Posts?.Any(e => e.PostId == id)).GetValueOrDefault();
+            return (_context.Posts?.Any(e => e.PostId.Equals(id))).GetValueOrDefault();
         }
     }
 }

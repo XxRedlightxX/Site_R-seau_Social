@@ -23,19 +23,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders(); ;
+builder.Services.AddIdentity<Utilisateur, IdentityRole>(options
+ => options.SignIn.RequireConfirmedAccount = true).
+ AddEntityFrameworkStores<ApplicationDbContext>()
+ .AddDefaultUI()
+ .AddDefaultTokenProviders();
+builder.Services.AddScoped<UserManager<Utilisateur>>();
 
-/*
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-*/
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("TwilioSettings"));
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId =
+   builder.Configuration.GetSection("GoogleAuthSettings")
+   .GetValue<string>("ClientId");
+    googleOptions.ClientSecret =
+   builder.Configuration.GetSection("GoogleAuthSettings")
+   .GetValue<string>("ClientSecret");
+});
 
 builder.Services.AddDistributedMemoryCache(); // Utilisation de la m�moire pour stocker les sessions
 builder.Services.AddSession(options =>

@@ -36,7 +36,7 @@ namespace CrossConvoApp.Controllers
             var groupeUtilisateur = await _context.GroupesUtilisateurs
                 .Include(g => g.Groupe)
                 .Include(g => g.Utilisateur)
-                .FirstOrDefaultAsync(m => m.GroupeId == id);
+                .FirstOrDefaultAsync(m => m.GroupeId.Equals(id));
             if (groupeUtilisateur == null)
             {
                 return NotFound();
@@ -94,9 +94,9 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GroupeId,UtilisateurId")] GroupeUtilisateur groupeUtilisateur)
+        public async Task<IActionResult> Edit(string id, [Bind("GroupeId,UtilisateurId")] GroupeUtilisateur groupeUtilisateur)
         {
-            if (id != groupeUtilisateur.GroupeId)
+            if (id !.Equals( groupeUtilisateur.GroupeId))
             {
                 return NotFound();
             }
@@ -137,7 +137,7 @@ namespace CrossConvoApp.Controllers
             var groupeUtilisateur = await _context.GroupesUtilisateurs
                 .Include(g => g.Groupe)
                 .Include(g => g.Utilisateur)
-                .FirstOrDefaultAsync(m => m.GroupeId == id);
+                .FirstOrDefaultAsync(m => m.GroupeId.Equals(id));
             if (groupeUtilisateur == null)
             {
                 return NotFound();
@@ -165,9 +165,10 @@ namespace CrossConvoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupeUtilisateurExists(int id)
+        private bool GroupeUtilisateurExists(string id)
         {
-            return (_context.GroupesUtilisateurs?.Any(e => e.GroupeId == id)).GetValueOrDefault();
+            return (_context.GroupesUtilisateurs?.Any(e => e.GroupeId.Equals(id))).GetValueOrDefault();
         }
     }
 }
+    

@@ -7,7 +7,7 @@ namespace CrossConvo.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int idAmi { get; set; }
+        public string idAmi { get; set; }
 
         [Required(ErrorMessage = "Veuillez entrer votre nom")]
         [DataType(DataType.Text)]
@@ -23,12 +23,12 @@ namespace CrossConvo.Models
         [Display(Name = "Préom de l'utilisateur")]
         public string? Prenom { get; set; }
 
-        [Required(ErrorMessage = "Veuillez entrer votre nom d'utilisateur")]
+        [Required(ErrorMessage = "Veuillez entrer votre username d'utilisateur")]
         [DataType(DataType.Text)]
         [Column(TypeName = "VARCHAR")]
         [StringLength(50)]
-        [Display(Name = "Username de l'utilisateur")]
-        public string? Username { get; set; }
+        [Display(Name = "Username ami de l'utilisateur")]
+        public string? UsernameAmi { get; set; }
 
         [Required(ErrorMessage = "Veuillez entrer votre email")]
         [DataType(DataType.Text)]
@@ -37,8 +37,10 @@ namespace CrossConvo.Models
         [Display(Name = "Email de l'utilisateur")]
         public string? Email { get; set; }
 
-        public int? UtilisateurId { get; set; }
+        public string? UtilisateurId { get; set; }
 
         public virtual Utilisateur? Utilisateur { get; set; }
+      
     }
 }
+

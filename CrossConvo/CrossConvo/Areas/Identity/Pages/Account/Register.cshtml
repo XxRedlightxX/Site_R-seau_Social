@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Créer un nouveau compte.</h2>
+            <h2 text="#ffffff">Créer un nouveau compte.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
@@ -18,9 +18,9 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Prénom" class="form-control" aria-required="true" placeholder="Leblanc" />
-                <label asp-for="Input.Prénom">Prénom</label>
-                <span asp-validation-for="Input.Prénom" class="text-danger"></span>
+                <input asp-for="Input.Prenom" class="form-control" aria-required="true" placeholder="Leblanc" />
+                <label asp-for="Input.Prenom">Prénom</label>
+                <span asp-validation-for="Input.Prenom" class="text-danger"></span>
             </div>
          
             <div class="form-floating mb-3">
@@ -39,26 +39,28 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Téléphone" class="form-control" aria-required="true" placeholder="514-777-7777" />
-                <label asp-for="Input.Téléphone">Téléphone</label>
-                <span asp-validation-for="Input.Téléphone" class="text-danger"></span>
+                <input asp-for="Input.Telephone" class="form-control" aria-required="true" placeholder="514-777-7777" />
+                <label asp-for="Input.Telephone">Téléphone</label>
+                <span asp-validation-for="Input.Telephone" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">
-        <section>
+        <section >
+            <h1 >Connexion externe  </h1>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-
+                    
                 }
                 else
                 {
                     <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                         <div>
                             <p>
+                            
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
                                     <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>

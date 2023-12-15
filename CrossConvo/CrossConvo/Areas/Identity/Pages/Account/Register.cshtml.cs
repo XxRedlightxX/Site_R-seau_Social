@@ -6,10 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using CrossConvo.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,23 +25,23 @@ namespace CrossConvo.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<Utilisateur> _signInManager;
+        private readonly UserManager<Utilisateur> _userManager;
+        private readonly IUserStore<Utilisateur> _userStore;
+        private readonly IUserEmailStore<Utilisateur> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<Utilisateur> userManager,
+            IUserStore<Utilisateur> userStore,
+            SignInManager<Utilisateur> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
-            _emailStore = GetEmailStore();
+           
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -70,19 +72,21 @@ namespace CrossConvo.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Le nom est obligatoire.")]
             [Display(Name = "Nom")]
             public string Nom { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Le prénom est obligatoire.")]
             [Display(Name = "Prénom")]
-            public string Prénom { get; set; }
+            public string Prenom { get; set; }
+
+     
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "L'adresse e-mail est obligatoire.")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -106,11 +110,13 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required]
-            [StringLength(10), MinLength(10)]
-            [DataType(DataType.PhoneNumber)]
-            [Display(Name = "Téléphone")]
-            public string Téléphone { get; set; }
+            [Required(ErrorMessage = "Le numéro de téléphone est obligatoire.")]
+            [Phone(ErrorMessage = "Le numéro de téléphone n'est pas valide.")]
+            [RegularExpression(@"^1\d{10}$", ErrorMessage = "Le format du numéro de téléphonedoit être 1 suivi de 10 chiffres.")]
+            [Display(Name = "Numéro de téléphone")]
+            public string Telephone { get; set; }
+            public bool TwoFactorEnabled { get; set; }
+            public bool PhoneNumberConfirmed { get; set; }
         }
 
 
@@ -126,16 +132,30 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
+                
+                MailAddress address = new MailAddress(Input.Email);
+           
+                var user = new Utilisateur
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    
+                    Email = Input.Email,
+                    Password = Input.Password,
+                    UserName = Input.Email,
+                    // Nouveaux champs
+                    PhoneNumber = Input.Telephone,
+                      
+                    TwoFactorEnabled = Input.TwoFactorEnabled,
+                    PhoneNumberConfirmed = Input.PhoneNumberConfirmed,
+                    // Nouveaux champs personnalisé
+                    Nom = Input.Nom,
+                    Prenom = Input.Prenom,
+                };
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+               var result = await _userManager.CreateAsync(user, Input.Password);
 
+               if (result.Succeeded)
+        {
+            _logger.LogInformation("User created a new account with password.");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -162,33 +182,32 @@ namespace CrossConvo.Areas.Identity.Pages.Account
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-            }
 
-            // If we got this far, something failed, redisplay form
-            return Page();
+            }
+           return Page();
         }
 
-        private IdentityUser CreateUser()
+        private Utilisateur CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<Utilisateur>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Utilisateur)}'. " +
+                    $"Ensure that '{nameof(Utilisateur)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<Utilisateur> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<Utilisateur>)_userManager;
         }
     }
 

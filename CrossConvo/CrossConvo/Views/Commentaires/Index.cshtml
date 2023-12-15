@@ -37,7 +37,7 @@
                 Date publication: @Html.DisplayFor(modelItem => item.PublicationDate)<br />
                 Commentaire: @Html.DisplayFor(modelItem => item.Contenu)<br />
                 Nom du poste où est le commentaire: @Html.DisplayFor(modelItem => item.Post.Title)<br />
-                Auteur: @Html.DisplayFor(modelItem => item.Utilisateur.Email) Utilisateur: @Html.DisplayFor(modelItem => item.Utilisateur.Username)<br />
+                Auteur: @Html.DisplayFor(modelItem => item.Utilisateur.Email) Utilisateur: @Html.DisplayFor(modelItem => item.Utilisateur.Nom)<br />
                 @Html.DisplayFor(modelItem => item.Likes) likes
                 <div>
                     <a asp-action="Edit" asp-route-id="@item.CommentaireId">Edit</a> |

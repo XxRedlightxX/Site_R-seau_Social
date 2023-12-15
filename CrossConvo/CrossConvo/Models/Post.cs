@@ -7,7 +7,7 @@ namespace CrossConvo.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PostId { get; set; }
+        public string PostId { get; set; }
 
         [Required(ErrorMessage = "Le champ Titre est requis.")]
         [Display(Name = "Titre de l'article")]
@@ -17,7 +17,7 @@ namespace CrossConvo.Models
         [Display(Name = "Date de publication")]
         public DateTime? PublicationDate { get; set; }
 
-        public int UtilisateurId { get; set; }
+        public string? UtilisateurId { get; set; }
 
         public virtual Utilisateur? Utilisateur { get; set; }
 
@@ -26,5 +26,8 @@ namespace CrossConvo.Models
         public int Likes { get; set; }
 
         public virtual ICollection<Commentaire>? Commentaires { get; set; }
+
+        
     }
 }
+

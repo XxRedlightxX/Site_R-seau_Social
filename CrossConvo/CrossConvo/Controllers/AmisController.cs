@@ -35,7 +35,7 @@ namespace CrossConvoApp.Controllers
 
             var ami = await _context.Amis
                 .Include(a => a.Utilisateur)
-                .FirstOrDefaultAsync(m => m.idAmi == id);
+                .FirstOrDefaultAsync(m => m.idAmi.Equals(id));
             if (ami == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idAmi,Nom,Prenom,Username,Email,UtilisateurId")] Ami ami)
+        public async Task<IActionResult> Create([Bind("idAmi,Nom,Prenom,UsernameAmi,Email,UtilisateurId")] Ami ami)
         {
             if (ModelState.IsValid)
             {
@@ -90,9 +90,9 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idAmi,Nom,Prenom,Username,Email,UtilisateurId")] Ami ami)
+        public async Task<IActionResult> Edit(int id, [Bind("idAmi,Nom,Prenom,UsernameAmi,Email,UtilisateurId")] Ami ami)
         {
-            if (id != ami.idAmi)
+            if (id!.Equals(ami.idAmi))
             {
                 return NotFound();
             }
@@ -131,7 +131,7 @@ namespace CrossConvoApp.Controllers
 
             var ami = await _context.Amis
                 .Include(a => a.Utilisateur)
-                .FirstOrDefaultAsync(m => m.idAmi == id);
+                .FirstOrDefaultAsync(m => m.idAmi.Equals(id));
             if (ami == null)
             {
                 return NotFound();
@@ -159,9 +159,9 @@ namespace CrossConvoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AmiExists(int id)
+        private bool AmiExists(string id)
         {
-            return (_context.Amis?.Any(e => e.idAmi == id)).GetValueOrDefault();
+            return (_context.Amis?.Any(e => e.idAmi.Equals(id))).GetValueOrDefault();
         }
     }
 }

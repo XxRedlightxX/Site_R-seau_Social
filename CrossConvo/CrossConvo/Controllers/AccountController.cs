@@ -7,11 +7,11 @@ public class AccountController : Controller
         return View();
     }
     [HttpPost]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(string Email, string password)
     {
-        if (username == "root" && password == "root")
+        if (Email == "root" && password == "root")
         {
-            HttpContext.Session.SetString("UserName", username);
+            HttpContext.Session.SetString("Email", Email);
             return RedirectToAction("Index", "Home");
         }
         else

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CrossConvo.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<Utilisateur>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -27,15 +27,17 @@ namespace CrossConvo.Models
                 modelBuilder.Entity<GroupeUtilisateur>()
                     .HasKey(gu => new { gu.GroupeId, gu.UtilisateurId });
 
+
                 modelBuilder.Entity<GroupeUtilisateur>()
                     .HasOne(gu => gu.Groupe)
                     .WithMany(g => g.GroupesUtilisateurs)
                     .HasForeignKey(gu => gu.GroupeId);
 
-                modelBuilder.Entity<GroupeUtilisateur>()
+            modelBuilder.Entity<GroupeUtilisateur>()
                     .HasOne(gu => gu.Utilisateur)
                     .WithMany(u => u.GroupesUtilisateurs)
                     .HasForeignKey(gu => gu.UtilisateurId)
+                    .HasPrincipalKey(u => u.Id)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 modelBuilder.Entity<Commentaire>()
@@ -47,6 +49,7 @@ namespace CrossConvo.Models
                     .HasOne(ami => ami.Utilisateur)
                     .WithMany(u => u.Amis)
                     .HasForeignKey(ami => ami.UtilisateurId)
+                    .HasPrincipalKey(u => u.Id)
                     .OnDelete(DeleteBehavior.SetNull);
             }
 

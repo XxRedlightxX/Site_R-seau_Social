@@ -5,31 +5,44 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
+using CrossConvo.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static CrossConvo.Areas.Identity.Pages.Account.ExternalLoginModel;
 
 namespace CrossConvo.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly SignInManager<Utilisateur> _signInManager;
+        private readonly UserManager<Utilisateur> _userManager;
+        private readonly IUserStore<Utilisateur> _userStore;
+        private readonly IUserEmailStore<Utilisateur> _emailStore;
+        private readonly IEmailSender _emailSender;
+        private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginsModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IUserStore<IdentityUser> userStore)
+            SignInManager<Utilisateur> signInManager,
+             UserManager<Utilisateur> userManager,
+             IUserStore<Utilisateur> userStore,
+             ILogger<ExternalLoginModel> logger,
+             IEmailSender emailSender)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
+            _userManager = userManager;
             _userStore = userStore;
+          
+            _logger = logger;
+            _emailSender = emailSender;
         }
-
+        [BindProperty]
+        public InputModel Input { get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -48,6 +61,7 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public bool ShowRemoveButton { get; set; }
 
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -55,6 +69,7 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
+       
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -69,7 +84,7 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<IdentityUser> userPasswordStore)
+            if (_userStore is IUserPasswordStore<Utilisateur> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }
@@ -137,5 +152,42 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
             StatusMessage = "The external login was added.";
             return RedirectToPage();
         }
-    }
-}
+
+        public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            // Get the information about the user from the external login provider
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+               var ErrorMessage = "Error loading external login information during confirmation.";
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+            if (ModelState.IsValid)
+            {
+
+                MailAddress address = new MailAddress(Input.Email);
+                string userName = address.User;
+                var user = new Utilisateur
+                {
+                    UserName = userName,
+                    Email = Input.Email,
+                    // Nouveaux champs
+
+                };
+                var result = await _userManager.CreateAsync(user);
+
+            }
+            return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+        }
+        private IUserEmailStore<Utilisateur> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<Utilisateur>)_userStore;
+        }
+
+    } }
+        
