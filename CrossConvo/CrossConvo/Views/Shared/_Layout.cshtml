@@ -18,26 +18,15 @@
             <div class="wrapper">
                 <div class="sidebar">
                     <ul>
+                        <li>@Html.Partial("_LoginPartial")</li>
                         <li><a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-home"></i></a></li>
-                        <li><a class="" asp-area="" asp-controller="Account" asp-action="Login"><i class="fas fa-user"></i></a></li>
                         <li><a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-blog"></i></a></li>
                         <li><a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-bell"></i></a></li>
                         <li><a class="" asp-area="" asp-controller="Home" asp-action="ExplorerPage"><i class="fas fa-cog"></i></a></li>
-                        <div class="dropdown">
-                        <li><a class="dropbtn" asp-area="" asp-controller="Home" asp-action="Admin"><i class="fas fa-hard-hat"></i></a></li>
-                        <div class="dropdown-content">
-                            <ul>
-                                <li><a href="~/Groupes/Index">Gestion des Groupes</a></li>
-                                <li><a href="~/Utilisateurs/Index">Gestion des Utilisateurs</a></li>
-                                <li><a href="~/Amis/Index">Gestion des Amis</a></li>
-                                <li><a href="~/Posts/Index">Gestion des Posts</a></li>
-                                <li><a href="~/Commentaires/Index">Gestion des Commentaires</a></li>
-                                <li><a href="~/GroupeUtilisateurs/Index">***Gestion des GU***</a></li>
-                            </ul>
-                        </div>
-                </div>
-                </ul>
-                <ul class="connexion">
+                        <li><a class="" asp-area="" asp-controller="Home" asp-action="Admin"><i class="fas fa-hard-hat"></i></a></li>
+                    </ul>
+                    <ul class="connexion">
+
                         @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
                         @{
@@ -46,21 +35,21 @@
                         }
                         @if (connection != null || !string.IsNullOrEmpty(userName))
                         {
-                        <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
+                            <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
                                 @Html.ActionLink("", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                            <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-in-alt"></i></a>
-                        </li>
+                                <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-in-alt"></i></a>
+                            </li>
                         }
                         else
                         {
-                        <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
+                            <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
                                 @Html.ActionLink("", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                            <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-out-alt"></i></a>
-                        </li>
+                                <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-out-alt"></i></a>
+                            </li>
                         }
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
         </div>
     </header>
     <div class="container">
@@ -76,3 +65,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+

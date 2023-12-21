@@ -1,15 +1,16 @@
 ﻿using CrossConvo.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace CrossConvo.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
         public DbSet<Groupe> Groupes { get; set; }
         public DbSet<GroupeUtilisateur> GroupesUtilisateurs { get; set; }
         public DbSet<Utilisateur> Utilisateurs { get; set; }
@@ -17,8 +18,12 @@ namespace CrossConvo.Models
         public DbSet<Post> Posts { get; set; }
         public DbSet<Commentaire> Commentaires { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Your custom entity configurations
             modelBuilder.Entity<GroupeUtilisateur>()
                 .HasKey(gu => new { gu.GroupeId, gu.UtilisateurId });
 
@@ -43,10 +48,6 @@ namespace CrossConvo.Models
                 .WithMany(u => u.Amis)
                 .HasForeignKey(ami => ami.UtilisateurId)
                 .OnDelete(DeleteBehavior.SetNull);
-
-
-           
-
         }
 
         public void SeedData()

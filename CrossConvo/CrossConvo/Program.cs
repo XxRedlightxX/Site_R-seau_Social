@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
+using Microsoft.AspNetCore.Identity;
+using CrossConvo.Settings;
+using CrossConvo.Service;
 //using CrossConvo.Hub.CrossConvo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,32 +23,53 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-// pour base des données mysql
-/*
-var connectionString = configuration.GetConnectionString("LocalDbConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-});
-*/
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders(); ;
 
-builder.Services.AddDistributedMemoryCache(); // Utilisation de la mémoire pour stocker les sessions
+/*
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+*/
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("TwilioSettings"));
+
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId =
+   builder.Configuration.GetSection("GoogleAuthSettings")
+   .GetValue<string>("ClientId");
+    googleOptions.ClientSecret =
+   builder.Configuration.GetSection("GoogleAuthSettings")
+   .GetValue<string>("ClientSecret");
+});
+
+
+builder.Services.AddDistributedMemoryCache(); // Utilisation de la mï¿½moire pour stocker les sessions
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Définir la durée de la session
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Dï¿½finir la durï¿½e de la session
     options.Cookie.Name = ".AspNetCore.Session"; // Nom du cookie de session
 });
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
+builder.Services.AddScoped<ISMSSenderService, SMSSenderService>();
+
+
+
 var app = builder.Build();
 
 
-// Configurez la base de données et ajoutez des données de test
+// Configurez la base de donnï¿½es et ajoutez des donnï¿½es de test
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate(); // Appliquer les migrations si nécessaire
-    dbContext.SeedData(); // Ajouter des données de test
+    dbContext.Database.Migrate(); // Appliquer les migrations si nï¿½cessaire
+    dbContext.SeedData(); // Ajouter des donnÃ©es de test
+
 }
 
 // Configure the HTTP request pipeline.
@@ -68,7 +92,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-/*
-app.MapHub<ChatHub>("/chatHub");
-*/
+//app.MapHub<ChatHub>("/chatHub");
+app.MapRazorPages();
 app.Run();
