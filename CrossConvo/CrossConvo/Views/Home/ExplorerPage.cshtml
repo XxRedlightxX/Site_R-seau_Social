@@ -1,5 +1,8 @@
-﻿@model IEnumerable<CrossConvo.Models.Post>
+﻿@model IEnumerable<CrossConvo.Models.Utilisateur>
+@using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<Utilisateur> SignInManager
+@inject UserManager<Utilisateur> UserManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,44 +14,68 @@
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <script src="~/js/switch_theme.js"></script>
 
-    <header>
-        <h1>Explorer</h1>
-        <h3>Recherche</h3>
+    <form asp-controller="Utilisateurs" asp-action="Search" method="POST">
+        <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
+        <input type="submit" value="Rechercher" />
+    </form>
 
-        <form action="~/Utilisateurs/Search" method="POST">
-            <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
-            <input type="submit" value="Rechercher" />
-        </form>
-    </header>
-    <div class="container">
+    <div class="entity-container">
+        @foreach (var item in Model)
+        {
+            <div class="entity-card">
+                <strong>@Html.DisplayFor(modelItem => item.Nom) @Html.DisplayFor(modelItem => item.Prenom)</strong><br />
+                <strong>@Html.DisplayFor(modelItem => item.Email) @Html.DisplayFor(modelItem => item.Email)</strong> <div class="entity-card" data-user-id="@item.Id"> <i class="fas fa-plus icon_ajout"></i></div>
 
-        <div class="gallery">
-            
-                @foreach (var item in Model)
+                @if (item.Posts != null)
                 {
-                    <div class="image">
-                        <img src="~/img/home/hiking.jpg" alt="Image 1">
-                        <p>@Html.DisplayFor(modelItem => item.Likes)</p>
-                    <a href="~/Home/Profil/@item.UtilisateurId"><h5><b>Titre : </b>@Html.DisplayFor(modelItem => item.Utilisateur.Nom)</h5></a>
-                        
-                        <button onclick="incrementLikes()">Like</button>
-
-
-
-                    </div>
-
-
-                @foreach( var ite in Model)
-                {
-                    <a href="~/Home/Details/@ite.UtilisateurId">try</a>
-                    
+                    @foreach (var subItem in item.Posts)
+                    {
+                        <strong>@Html.DisplayFor(modelItem => subItem.PublicationDate) @Html.DisplayFor(modelItem => subItem.PublicationDate)</strong>
+                        <br />
+                        <strong>@Html.DisplayFor(modelItem => subItem.Title) @Html.DisplayFor(modelItem => subItem.Title)</strong>
+                        <br />
+                        <strong>@Html.DisplayFor(modelItem => subItem.Contenu) @Html.DisplayFor(modelItem => subItem.Contenu)</strong>
+                        <br />
+                        <strong>@Html.DisplayFor(modelItem => subItem.Utilisateur.Nom) @Html.DisplayFor(modelItem => subItem.Utilisateur.Nom)</strong>
+                        <br />
+                        <strong>@Html.DisplayFor(modelItem => subItem.Utilisateur.Email) @Html.DisplayFor(modelItem => subItem.Utilisateur.Email)</strong>
+                        <br />
+                        <strong>@Html.DisplayFor(modelItem => subItem.Likes) @Html.DisplayFor(modelItem => subItem.Likes)</strong>
+                        <br />
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            if (subItem.LikedUserIds.Contains(item.Id))
+                            {
+                                <i class="far fa-heart icon11"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-heart icon111"></i>
+                            }
+                        }
+                        <strong>@Html.DisplayFor(modelItem => subItem.File) @Html.DisplayFor(modelItem => subItem.File)</strong>
+                        <br />
+                        @if (subItem.Commentaires != null)
+                        {
+                            foreach (var subSubItem in subItem.Commentaires)
+                            {
+                                <strong>@Html.DisplayFor(modelItem => subSubItem.Utilisateur.Email) @Html.DisplayFor(modelItem => subSubItem.Utilisateur.Email)</strong>
+                                <br />
+                                <strong>@Html.DisplayFor(modelItem => subSubItem.Utilisateur.Nom) @Html.DisplayFor(modelItem => subSubItem.Utilisateur.Nom)</strong>
+                                <br />
+                                <strong>@Html.DisplayFor(modelItem => subSubItem.PublicationDate) @Html.DisplayFor(modelItem => subSubItem.PublicationDate)</strong>
+                                <br />
+                                <strong>@Html.DisplayFor(modelItem => subSubItem.Contenu) @Html.DisplayFor(modelItem => subSubItem.Contenu)</strong>
+                                <br />
+                            }
+                        }
+                    }
                 }
-
-
-            }
-        </div>
+            </div>
+        }
     </div>
 
 
@@ -58,21 +85,30 @@
     <script src="~/js/lightbox-plus-jquery.js"></script>
 
     <script>
-        function incrementLikes() {
-            // Use AJAX to call the method in the controller
-            $.ajax({
-                url: '@Url.Action("IncrementLikes", "HomeController")', // Replace with your controller and action names
-                type: 'GET',
-                success: function () {
-                    // Reload the page to update the like count
-                    location.reload();
-                },
-                error: function () {
-                    // Handle error if any
-                    alert('Error incrementing likes.');
-                }
+        $(document).ready(function () {
+            $('.icon_ajout').on('click', function () {
+                // Get the userId from the user card, assuming you store it in a data attribute
+                var userId = $(this).closest('.entity-card').data('user-id');
+
+                // Use AJAX to call the AddAmi action in the controller
+                $.ajax({
+                    url: '@Url.Action("AddAmi", "Utilisateurs")',
+                    type: 'POST',
+                    data: { friendId: userId },
+                    success: function (data) {
+                        if (data.success) {
+                            // Optionally update the UI to reflect the friend addition
+                            alert('Friend added successfully!');
+                        } else {
+                            alert('Error adding friend: ' + data.errorMessage);
+                        }
+                    },
+                    error: function () {
+                        alert('Error adding friend.');
+                    }
+                });
             });
-        }
+        });
     </script>
 </body>
 </html>

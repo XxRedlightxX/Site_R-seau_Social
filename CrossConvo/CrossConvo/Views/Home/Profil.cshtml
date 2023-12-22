@@ -87,9 +87,9 @@
                     <h4 class="modal-title">Add a New Post</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- Add your form elements for creating a new post -->
-                    <form asp-action="AddPost" asp-controller="YourControllerName" id="addPostForm" method="post">
-                        <!-- Example: Title and Content input fields -->
+                    <form asp-action="AddPost" asp-controller="Home" id="addPostForm" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
                         <div class="form-group">
                             <label for="postTitle">Title:</label>
                             <input type="text" class="form-control" id="postTitle" name="Title" required>
@@ -114,15 +114,12 @@
 
 <script src="~/js/switch_theme.js"></script>
 <script>
-    $(document).ready(function () {
-        // Example: Submitting the form inside the modal
-        $('#addPostForm').submit(function (e) {
-            e.preventDefault();
-            // Add your logic to handle form submission here
-            // You may want to use AJAX to submit the form data to the server
-            // After successful submission, you can close the modal using $('#addPostModal').modal('hide');
+        $(document).ready(function () {
+            // Optionally, you can uncomment this line to allow default form submission
+            // $('#addPostForm').submit(function (e) {
+            //     e.preventDefault();
+            // });
         });
-    });
-</script>
+    </script>
 
 </html>

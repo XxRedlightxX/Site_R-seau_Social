@@ -27,9 +27,9 @@ namespace CrossConvo.Models
 
         public int Likes { get; set; }
 
-        [NotMapped]
+  
         [DataType(DataType.Upload)]
-        public IFormFile? File { get; set; }
+        public byte[]? File { get; set; }
 
         public ICollection<Commentaire>? Commentaires { get; set; }
 
