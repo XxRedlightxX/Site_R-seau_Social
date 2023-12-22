@@ -39,6 +39,9 @@ builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twi
 builder.Services.AddScoped<ISMSSenderService, SMSSenderService>();
 builder.Services.AddScoped<SignInManager<Utilisateur>>();
 
+builder.Services.AddScoped<SignInManager<Utilisateur>, SignInManager<Utilisateur>>();
+builder.Services.AddScoped<UserManager<Utilisateur>, UserManager<Utilisateur>>();
+
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration.GetSection("GoogleAuthSettings").GetValue<string>("ClientId");

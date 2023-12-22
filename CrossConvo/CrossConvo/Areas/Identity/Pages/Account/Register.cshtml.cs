@@ -114,7 +114,7 @@ namespace CrossConvo.Areas.Identity.Pages.Account
 
                 var user = new Utilisateur
                 {
-                    UserName = userName,
+                    UserName = Input.Email,
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
                     TwoFactorEnabled = Input.TwoFactorEnabled,

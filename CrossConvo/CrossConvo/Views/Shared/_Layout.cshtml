@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<Utilisateur> SignInManager
+@inject UserManager<Utilisateur> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,6 +29,10 @@
                         <li><a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-bell"></i></a></li>
                         <li><a class="" asp-area="" asp-controller="Home" asp-action="ExplorerPage"><i class="fas fa-cog"></i></a></li>
                         <li><a class="" asp-area="" asp-controller="Home" asp-action="Admin"><i class="fas fa-hard-hat"></i></a></li>
+                        <li><a class="" asp-area="" asp-controller="Home" asp-action="Profil"><i class="fas fa-user-circle"></i></a></li>
+                        @if (SignInManager.IsSignedIn(User)){
+                            <li><a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fas fa-user"></i></a></li>
+                        }
                     </ul>
                     <ul class="connexion">
 

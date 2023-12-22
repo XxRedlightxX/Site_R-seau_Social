@@ -27,16 +27,33 @@ namespace CrossConvo.Models
 
         public int Likes { get; set; }
 
-        public ICollection<Commentaire>? Commentaires { get; set; }      
+        [NotMapped]
+        [DataType(DataType.Upload)]
+        public IFormFile? File { get; set; }
+
+        public ICollection<Commentaire>? Commentaires { get; set; }
 
 
+        [NotMapped]
+        public ICollection<string> LikedUserIds { get; set; } = new List<string>();
 
-
-
-
-        public void IncrementLikes() 
+        public void IncrementLikes(string userId)
         {
-            Likes++; // Incrémente le nombre de likes de 1
+            if (!LikedUserIds.Contains(userId))
+            {
+                Likes++;
+                LikedUserIds.Add(userId);
+            }
+        }
+
+        // Method to decrement likes for the current user
+        public void DecrementLikes(string userId)
+        {
+            if (LikedUserIds.Contains(userId))
+            {
+                Likes--;
+                LikedUserIds.Remove(userId);
+            }
         }
     }
 }

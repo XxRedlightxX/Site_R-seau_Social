@@ -1,38 +1,128 @@
-﻿@model CrossConvo.Models.Utilisateur
+﻿@using Microsoft.AspNetCore.Identity
 
-@*
-  
-*@
-@{
-    ViewData["Title"] = "Profil";
-}
+@inject SignInManager<Utilisateur> SignInManager
+@inject UserManager<Utilisateur> UserManager
 
+@model CrossConvo.Models.Utilisateur
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Profil</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome CSS -->
+    <link href="https://kit.fontawesome.com/b99e675b6e.js" rel="stylesheet">
+
+    <!-- Your custom CSS files -->
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- Your custom JavaScript files -->
+    <script src="~/js/switch_theme.js"></script>
 </head>
 
+<body>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <p>Hello @UserManager.GetUserName(User)!</p>
+        <p>
+            <strong>Nom de l'utilisateur:</strong> @Html.DisplayFor(model => model.Nom)
+        </p>
+
+        <h2>VOS POSTS</h2>
+        <i class="fas fa-plus icon_ajout" data-toggle="modal" data-target="#addPostModal"></i>
+
+        @if (Model != null && Model.Posts != null && Model.Posts.Any())
+        {
+            <ul>
+                @foreach (var post in Model.Posts)
+                {
+                    <li>
+                        <strong>@post.Title</strong>
+                        <p>@post.Contenu</p>
+                        <p>Published on: @post.PublicationDate</p>
+                        <p>Likes: @post.Likes</p>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            if (post.LikedUserIds.Contains(Model.Id))
+                            {
+                                <i class="far fa-heart icon11"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-heart icon111"></i>
+                            }
+                        }
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Vous avez 0 posts</p>
+        }
+    }
+    else
+    {
+        <p>Connecté vous pour voir vos posts</p>
+    }
 
 
+    <div id="addPostModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add a New Post</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your form elements for creating a new post -->
+                    <form asp-action="AddPost" asp-controller="YourControllerName" id="addPostForm" method="post">
+                        <!-- Example: Title and Content input fields -->
+                        <div class="form-group">
+                            <label for="postTitle">Title:</label>
+                            <input type="text" class="form-control" id="postTitle" name="Title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postContent">Content:</label>
+                            <textarea class="form-control" id="postContent" name="Contenu" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="postFile">File:</label>
+                            <input type="file" class="form-control" id="postFile" name="File">
+                        </div>
 
-    <body>
-    <dt>
-        @Html.DisplayNameFor(model => model.Nom)
-    </dt>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</body>
 
-    @Html.DisplayNameFor(model => model.Nom)
-    @Html.DisplayFor(model => model.Nom)
-    </body>
-
-
-
+<script src="~/js/switch_theme.js"></script>
+<script>
+    $(document).ready(function () {
+        // Example: Submitting the form inside the modal
+        $('#addPostForm').submit(function (e) {
+            e.preventDefault();
+            // Add your logic to handle form submission here
+            // You may want to use AJAX to submit the form data to the server
+            // After successful submission, you can close the modal using $('#addPostModal').modal('hide');
+        });
+    });
+</script>
 
 </html>

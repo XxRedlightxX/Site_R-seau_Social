@@ -1,5 +1,6 @@
 ﻿@model string
-
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<script src="~/js/switch_theme.js"></script>
 @if (!String.IsNullOrEmpty(Model))
 {
     var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
