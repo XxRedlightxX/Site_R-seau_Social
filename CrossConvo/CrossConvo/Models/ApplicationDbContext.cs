@@ -45,11 +45,6 @@ namespace CrossConvo.Models
                 .WithMany(g => g.Utilisateurs)
                 .HasForeignKey(u => u.GroupeId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<Utilisateur>()
-                .Property(u => u.UtilisateurId)
-                .ValueGeneratedOnAdd();
         }
 
         public void SeedData()
