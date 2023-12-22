@@ -14,26 +14,29 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Runtime.ConstrainedExecution;
 using CrossConvo.Service;
+using CrossConvo.Models;
 
 namespace CrossConvo.Areas.Identity.Pages.Account
 {
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<Utilisateur> _signInManager;
+        private readonly UserManager<Utilisateur> _userManager;
         private readonly ILogger<LoginWith2faModel> _logger;
+        private readonly IEmailSender _emailSender;
         private readonly ISMSSenderService _smsSenderService;
 
         public LoginWith2faModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+            SignInManager<Utilisateur> signInManager,
+            UserManager<Utilisateur> userManager,
             ILogger<LoginWith2faModel> logger,
-            ISMSSenderService sMSSenderService)
+            IEmailSender emailSender, ISMSSenderService smsSenderService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
-            _smsSenderService = sMSSenderService;
+            _emailSender = emailSender;
+            _smsSenderService = smsSenderService;
         }
 
         /// <summary>

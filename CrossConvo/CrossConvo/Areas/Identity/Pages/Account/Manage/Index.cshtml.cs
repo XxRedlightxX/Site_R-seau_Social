@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using CrossConvo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,12 +15,12 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<Utilisateur> _userManager;
+        private readonly SignInManager<Utilisateur> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<Utilisateur> userManager,
+            SignInManager<Utilisateur> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,19 +59,34 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Username")]
+            public string Username { get; set; }
+            [Required(ErrorMessage = "Le prénom est obligatoire.")]
+            [Display(Name = "Prénom")]
+            public string Prenom { get; set; }
+            [Required(ErrorMessage = "Le nom est obligatoire.")]
+            [Display(Name = "Nom")]
+            public string Nom { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(Utilisateur user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
 
+            // ajout
+            var nom = user.Nom;
+            var prenom = user.Prenom;
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Nom = nom,
+                Prenom = prenom
             };
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -109,7 +125,18 @@ namespace CrossConvo.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-
+            var nom = user.Nom;
+            var prenom = user.Prenom;
+            if (Input.Nom != nom)
+            {
+                user.Nom = Input.Nom;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Prenom != prenom)
+            {
+                user.Prenom = Input.Prenom;
+                await _userManager.UpdateAsync(user);
+            }
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

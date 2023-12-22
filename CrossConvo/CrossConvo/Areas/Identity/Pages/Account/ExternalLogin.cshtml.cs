@@ -17,25 +17,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using CrossConvo.Models;
+using System.Net.Mail;
 
 namespace CrossConvo.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<Utilisateur> _signInManager;
+        private readonly UserManager<Utilisateur> _userManager;
+        private readonly IUserStore<Utilisateur> _userStore;
+        private readonly IUserEmailStore<Utilisateur> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
-
         public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+        SignInManager<Utilisateur> signInManager,
+        UserManager<Utilisateur> userManager,
+        IUserStore<Utilisateur> userStore,
+        ILogger<ExternalLoginModel> logger,
+        IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -151,10 +152,20 @@ namespace CrossConvo.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                // var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                //   await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                // await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                MailAddress address = new MailAddress(Input.Email);
+                string userName = address.User;
+                var user = new Utilisateur
+                {
+                    UserName = userName,
+                    Email = Input.Email,
+                    // Nouveaux champs
+                };
+
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -211,13 +222,13 @@ namespace CrossConvo.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<Utilisateur> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<Utilisateur>)_userStore;
         }
     }
 }

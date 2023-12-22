@@ -6,13 +6,12 @@ using System.Collections.Generic;
 
 namespace CrossConvo.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<Utilisateur>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
         public DbSet<Groupe> Groupes { get; set; }
-        public DbSet<GroupeUtilisateur> GroupesUtilisateurs { get; set; }
         public DbSet<Utilisateur> Utilisateurs { get; set; }
         public DbSet<Ami> Amis { get; set; }
         public DbSet<Post> Posts { get; set; }
@@ -23,20 +22,6 @@ namespace CrossConvo.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // Your custom entity configurations
-            modelBuilder.Entity<GroupeUtilisateur>()
-                .HasKey(gu => new { gu.GroupeId, gu.UtilisateurId });
-
-            modelBuilder.Entity<GroupeUtilisateur>()
-                .HasOne(gu => gu.Groupe)
-                .WithMany(g => g.GroupesUtilisateurs)
-                .HasForeignKey(gu => gu.GroupeId);
-
-            modelBuilder.Entity<GroupeUtilisateur>()
-                .HasOne(gu => gu.Utilisateur)
-                .WithMany(u => u.GroupesUtilisateurs)
-                .HasForeignKey(gu => gu.UtilisateurId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Commentaire>()
                 .HasOne(c => c.Utilisateur)
@@ -48,6 +33,23 @@ namespace CrossConvo.Models
                 .WithMany(u => u.Amis)
                 .HasForeignKey(ami => ami.UtilisateurId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.Utilisateur)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UtilisateurId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Utilisateur>()
+                .HasOne(u => u.Groupe)
+                .WithMany(g => g.Utilisateurs)
+                .HasForeignKey(u => u.GroupeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Utilisateur>()
+                .Property(u => u.UtilisateurId)
+                .ValueGeneratedOnAdd();
         }
 
         public void SeedData()

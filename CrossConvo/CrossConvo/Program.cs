@@ -1,76 +1,55 @@
+
 using Microsoft.EntityFrameworkCore;
-using CrossConvo.Models;
 using Microsoft.AspNetCore.Identity;
+using CrossConvo.Models;
+
 using CrossConvo.Settings;
+
+using CrossConvo.Models;
 using CrossConvo.Service;
-//using CrossConvo.Hub.CrossConvo.Models;
+using CrossConvo.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+// var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-
 
 var configuration = new ConfigurationBuilder()
 .SetBasePath(Directory.GetCurrentDirectory())
 .AddJsonFile("appsettings.json")
 .Build();
+
+// pour une base des donn??es Sql Server
 var connectionString = configuration.GetConnectionString("LocalSqlServerConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders(); ;
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-/*
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<Utilisateur, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
     .AddDefaultTokenProviders();
-*/
+builder.Services.AddScoped<UserManager<Utilisateur>>();
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("TwilioSettings"));
+builder.Services.AddScoped<ISMSSenderService, SMSSenderService>();
+builder.Services.AddScoped<SignInManager<Utilisateur>>();
 
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId =
-   builder.Configuration.GetSection("GoogleAuthSettings")
-   .GetValue<string>("ClientId");
-    googleOptions.ClientSecret =
-   builder.Configuration.GetSection("GoogleAuthSettings")
-   .GetValue<string>("ClientSecret");
+    googleOptions.ClientId = builder.Configuration.GetSection("GoogleAuthSettings").GetValue<string>("ClientId");
+    googleOptions.ClientSecret = builder.Configuration.GetSection("GoogleAuthSettings").GetValue<string>("ClientSecret");
 });
 
 
-builder.Services.AddDistributedMemoryCache(); // Utilisation de la m�moire pour stocker les sessions
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // D�finir la dur�e de la session
-    options.Cookie.Name = ".AspNetCore.Session"; // Nom du cookie de session
-});
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
-builder.Services.AddScoped<ISMSSenderService, SMSSenderService>();
-
-
-
+// Ajouter la prise en charge de Razor Pages
+builder.Services.AddRazorPages();
 var app = builder.Build();
-
-
-// Configurez la base de donn�es et ajoutez des donn�es de test
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate(); // Appliquer les migrations si n�cessaire
-    dbContext.SeedData(); // Ajouter des données de test
-
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -80,18 +59,15 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession();
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapHub<ChatHub>("/chatHub");
+
+// Mappez les pages Razor
 app.MapRazorPages();
+//app.MapHub<LearningHub>("/learningHub");
 app.Run();

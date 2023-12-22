@@ -37,7 +37,7 @@ namespace CrossConvo.Models
         [Display(Name = "Email de l'utilisateur")]
         public string? Email { get; set; }
 
-        public int? UtilisateurId { get; set; }
+        public string? UtilisateurId { get; set; }
 
         public virtual Utilisateur? Utilisateur { get; set; }
     }

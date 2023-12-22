@@ -27,26 +27,9 @@
                     </ul>
                     <ul class="connexion">
 
-                        @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-                        @{
-                            string connection = null;
-                            string userName = HttpContextAccessor.HttpContext.Session.GetString("userName");
-                        }
-                        @if (connection != null || !string.IsNullOrEmpty(userName))
-                        {
-                            <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
-                                @Html.ActionLink("", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                                <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-in-alt"></i></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li style="padding-bottom: 25px;padding-top: 0; margin-top: 0;">
-                                @Html.ActionLink("", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                                <a class="" asp-area="" asp-controller="" asp-action=""><i class="fas fa-sign-out-alt"></i></a>
-                            </li>
-                        }
+                        
+                        
+                        
                     </ul>
                 </div>
             </div>

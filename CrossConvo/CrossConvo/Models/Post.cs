@@ -18,17 +18,16 @@ namespace CrossConvo.Models
         [Display(Name = "Date de publication")]
         public DateTime? PublicationDate { get; set; }
 
-        public int UtilisateurId { get; set; }
-        
+        [ForeignKey("Utilisateur")]
+        public string UtilisateurId { get; set; }
+
         public virtual Utilisateur? Utilisateur { get; set; }
 
         public string? Contenu { get; set; }
 
         public int Likes { get; set; }
 
-        public virtual ICollection<Commentaire>? Commentaires { get; set; }
-        [NotMapped]
-        public virtual ICollection<Utilisateur>? users { get; set; }
+        public ICollection<Commentaire>? Commentaires { get; set; }      
 
 
 

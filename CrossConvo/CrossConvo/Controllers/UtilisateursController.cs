@@ -163,7 +163,7 @@ namespace CrossConvoApp.Controllers
         public async Task<ActionResult> Search(string searchName)
         {
             // Recherche des livres en fonction du nom du livre ou de la catégorie
-            var result = await _context.Utilisateurs.Where(p => p.Username.Contains(searchName)).ToListAsync();
+            var result = await _context.Utilisateurs.Where(p => p.Nom.Contains(searchName)).ToListAsync();
             return View("UtilisateurSearch", result);
         }
 

@@ -18,9 +18,11 @@ namespace CrossConvo.Models
             {
                 Nom = "LaBaie",
                 Prenom = "Ariel",
+                /*
                 Username = "ariel1234",
                 Email = "ariel1234@gmail.com",
                 Password = "ariel1234",
+                */
                 Amis = new List<Ami>(),
                 Posts = new List<Post>()
             };
@@ -29,9 +31,11 @@ namespace CrossConvo.Models
             {
                 Nom = "LaRouge",
                 Prenom = "Amanda",
+                /*
                 Username = "amanda1234",
                 Email = "amanda1234@gmail.com",
                 Password = "amandal1234",
+                */
                 Amis = new List<Ami>(),
                 Posts = new List<Post>()
             };
@@ -94,23 +98,26 @@ namespace CrossConvo.Models
             Groupe groupe1 = new Groupe
             {
                 Nom = "Groupe 1",
-                GroupesUtilisateurs = new List<GroupeUtilisateur>
-                {
-                    new GroupeUtilisateur
-                    {
-                        Utilisateur = utilisateur1
-                    },
-                    new GroupeUtilisateur
-                    {
-                        Utilisateur = utilisateur2
-                    }
-                }
+                Utilisateurs = new List<Utilisateur>()             
             };
 
             // Add users and groups to the lists
             Utilisateurs.Add(utilisateur1);
             Utilisateurs.Add(utilisateur2);
             Groupes.Add(groupe1);
+
+            groupe1.Utilisateurs.Add(new Utilisateur
+            {
+                Nom = "LaaBaie",
+                Prenom = "Ariel",
+                /*
+                Username = "ariel1234",
+                Email = "ariel1234@gmail.com",
+                Password = "ariel1234",
+                */
+                Amis = new List<Ami>(),
+                Posts = new List<Post>()
+            });
 
             return Groupes.ToArray();
         }

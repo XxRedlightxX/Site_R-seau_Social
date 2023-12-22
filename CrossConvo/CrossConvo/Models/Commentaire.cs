@@ -15,7 +15,7 @@ namespace CrossConvo.Models
 
         public string? Contenu { get; set; }
 
-        public int? UtilisateurId { get; set; }
+        public string? UtilisateurId { get; set; }
 
         public virtual Utilisateur? Utilisateur { get; set; }
 
