@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using CrossConvo.Models;
 
 using CrossConvo.Settings;
-
+using CrossConvo.Hubs;
 using CrossConvo.Models;
 using CrossConvo.Service;
 using CrossConvo.Settings;
@@ -72,5 +72,5 @@ app.MapControllerRoute(
 
 // Mappez les pages Razor
 app.MapRazorPages();
-//app.MapHub<LearningHub>("/learningHub");
+app.MapHub<LearningHub>("/learningHub");
 app.Run();

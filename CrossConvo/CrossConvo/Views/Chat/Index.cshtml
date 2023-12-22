@@ -1,28 +1,90 @@
-﻿@page
-<div class="container">
-    <div class="row p-1">
-        <div class="col-1">User</div>
-        <div class="col-5"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
+﻿@{
+    ViewData["Title"] = "Page d'accueil";
+}
+
+<div class="row" style="padding-top: 50px;">
+    <div class="col-md-4">
+        <div class="control-group">
+            <div>
+                <label for="broadcast">Message</label>
+                <input type="text" id="broadcast" name="broadcast" />
+            </div>
+            <button id="btn-broadcast">Diffuser</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="others-message">Message</label>
+                <input type="text" id="others-message" name="others-message" />
+            </div>
+            <button id="btn-others-message">Envoyer aux autres</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="self-message">Message</label>
+                <input type="text" id="self-message" name="self-message" />
+            </div>
+            <button id="btn-self-message">Envoyer à soi-même</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="individual-message">Message</label>
+                <input type="text" id="individual-message" name="individual-message" />
+            </div>
+            <div>
+                <label for="connection-for-message">ID de connexion de l'utilisateur :</label>
+                <input type="text" id="connection-for-message" name="connection-for-message" />
+            </div>
+            <button id="btn-individual-message">Envoyer à un utilisateur spécifique</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="group-message">Message</label>
+                <input type="text" id="group-message" name="group-message" />
+            </div>
+            <div>
+                <label for="group-for-message">Nom du groupe</label>
+                <input type="text" id="group-for-message" name="group-for-message" />
+            </div>
+            <button id="btn-group-message">Envoyer au groupe</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="group-to-add">Nom du groupe</label>
+                <input type="text" id="group-to-add" name="group-to-add" />
+            </div>
+            <button id="btn-group-add">Ajouter un utilisateur au groupe</button>
+        </div>
+        <div class="control-group">
+            <div>
+                <label for="group-to-remove">Nom du groupe</label>
+                <input type="text" id="group-to-remove" name="group-to-remove" />
+            </div>
+            <button id="btn-group-remove">Retirer un utilisateur du groupe</button>
         </div>
     </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
+
+    <div class="col-md-7">
+        <p>Messages SignalR :</p>
+        <pre id="signalr-message-panel"></pre>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoftsignalr/6.0.1/signalr.min.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<script src="~/js/switch_theme.js"></script>
+<style>
+    .body-content {
+ padding-left: 15px;
+ padding-right: 15px;
+}
+.control-group {
+ padding-top: 50px;
+}
+label {
+ width: 100px;
+}
+#signalr-message-panel {
+ height: calc(100vh - 200px);
+}
+</style>
