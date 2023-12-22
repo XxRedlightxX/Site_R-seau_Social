@@ -2,6 +2,6 @@
 {
     public interface ILearningHubClient
     {
-        Task ReceiveMessage(string message);
+        Task ReceiveMessage(string username, string message);
     }
 }

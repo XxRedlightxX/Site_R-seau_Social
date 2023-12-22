@@ -1,7 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Page d'accueil";
 }
+@using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<Utilisateur> SignInManager
+@inject UserManager<Utilisateur> UserManager
+
+@{
+    var username = User.Identity.IsAuthenticated ? UserManager.GetUserName(User) : null;
+}
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    // Stocker le nom d'utilisateur côté client
+    var initialUsername = '@username';
+</script>
+<li style="margin-left:60px">
+   
 <div class="row" style="padding-top: 50px;">
     <div class="col-md-4">
         <div class="control-group">
@@ -63,6 +80,34 @@
         </div>
     </div>
 
+
+    <li style="margin-left:60px">
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <div id="chat-form-container" data-username="@UserManager.GetUserName(User)">
+                <div id="chat-messages-container">
+                    <!-- Container pour afficher les messages -->
+                </div>
+                <div class="chat-body">
+                    <form class="chat-input" id="chat-form">
+                        <input type="hidden" name="roomId" value="">
+                        <input type="text" name="message" id="message-input" size="30" placeholder="Taper un message">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </form>
+
+                </div>
+            </div>
+            <div>
+                <a class="room-button" id="create-room-btn" onclick="toggleChatForm()">
+                    <strong class="fas fa-comment" style="color:white; font-size: 30px;"></strong>
+                    <p>Conversation</p>
+                </a>
+            </div>
+
+
+        }
+    </li>
     <div class="col-md-7">
         <p>Messages SignalR :</p>
         <pre id="signalr-message-panel"></pre>
@@ -71,6 +116,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoftsignalr/6.0.1/signalr.min.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+<script src="~/js/site.js"></script>
+<script src="~/js/signalr/chatScript.js"></script>
 <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 <script src="~/js/switch_theme.js"></script>
 <style>
