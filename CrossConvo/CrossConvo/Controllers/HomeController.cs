@@ -44,11 +44,8 @@ namespace CrossConvoApp.Controllers
 
         public async Task<IActionResult> ExplorerPage()
         {
-            var utilisateurs = await _context.Utilisateurs.ToListAsync();
-
-            return utilisateurs.Any()
-                ? View(utilisateurs)
-                : Problem("Entity set 'ApplicationDbContext.Utilisateurs' is empty.");
+            var utilisateurs = await _context.Utilisateurs.Include(u => u.Posts).ToListAsync();
+            return View(utilisateurs);
         }
 
         public async Task<IActionResult> Profil()
@@ -98,27 +95,23 @@ namespace CrossConvoApp.Controllers
 
             return RedirectToAction("Profil");
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddPost(Post post, IFormFile file)
         {
-            // Check if the user is authenticated
             if (!User.Identity.IsAuthenticated)
             {
-                // Handle the case where the user is not authenticated, e.g., redirect to login
-                return RedirectToAction("Login", "Account"); // Adjust this according to your authentication setup
+                return RedirectToAction("Login", "Account");
             }
 
-            // Retrieve the current user's ID
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Populate the UtilisateurId property with the current user's ID
             post.UtilisateurId = userId;
 
-            // Set the publication date to the current date and time
             post.PublicationDate = DateTime.Now;
 
-            // Handle file upload (if a file is provided)
             if (file != null && file.Length > 0)
             {
                 using (MemoryStream memoryStream = new MemoryStream())
@@ -127,35 +120,73 @@ namespace CrossConvoApp.Controllers
                     post.File = memoryStream.ToArray();
                 }
             }
-
-            // Add the post to your database context and save changes
-            // (You need to have a DbContext configured and injected into the controller)
             _context.Posts.Add(post);
             _context.SaveChanges();
-
-            // Redirect to a success page or the home page
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAmi(string friendId)
+        public async Task<IActionResult> AddFriend(string userId)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-
-            if (!string.IsNullOrEmpty(friendId))
+            try
             {
-                var ami = new Ami
+                if (!User.Identity.IsAuthenticated)
                 {
-                    UtilisateurId = currentUser.Id,
-                };
+                    return Json(new { success = false, error = "User not authenticated" });
+                }
 
-                _context.Amis.Add(ami);
-                await _context.SaveChangesAsync();
+                var currentUser = await _userManager.GetUserAsync(User);
 
-                return Json(new { success = true });
+                if (userId == currentUser.Id)
+                {
+                    return Json(new { success = false, error = "Cannot add yourself as a friend" });
+                }
+
+                var friendUser = await _userManager.FindByIdAsync(userId);
+
+                if (friendUser == null)
+                {
+                    return Json(new { success = false, error = "User not found" });
+                }
+
+                if (currentUser.Amis == null)
+                {
+                    currentUser.Amis = new List<Ami>();
+                }
+
+                if (!currentUser.Amis.Any(a => a.UtilisateurId == userId))
+                {
+                    var newAmi = new Ami
+                    {
+                        Nom = friendUser.Nom,
+                        Prenom = friendUser.Prenom,
+                        Username = friendUser.UserName,
+                        Email = friendUser.Email,
+                        UtilisateurId = userId
+                    };
+
+                    currentUser.Amis.Add(newAmi);
+                    var updateResult = await _userManager.UpdateAsync(currentUser);
+
+                    if (updateResult.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        var errors = string.Join(", ", updateResult.Errors.Select(e => e.Description));
+                        return Json(new { success = false, error = $"Failed to update user: {errors}" });
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, error = "User is already a friend" });
+                }
             }
-
-            return Json(new { success = false, errorMessage = "Invalid friendId" });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
