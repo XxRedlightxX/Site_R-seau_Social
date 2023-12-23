@@ -6,17 +6,16 @@
 <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 <script src="~/js/switch_theme.js"></script>
-
 <h1>Details</h1>
 
 <div>
     <h4>Groupe</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nom)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Nom)
         </dd>
     </dl>

@@ -15,14 +15,21 @@ namespace CrossConvo.Models
 
         public string? Contenu { get; set; }
 
-        public string? UtilisateurId { get; set; }
-
-        public virtual Utilisateur? Utilisateur { get; set; }
 
         public int PostId { get; set; }
 
-        public virtual Post? Post { get; set; }
+        public Post? Post { get; set; }
 
         public int Likes { get; set; }
+
+        [Required(ErrorMessage = "Veuillez entrer votre ID d'utilisateur")]
+        [DataType(DataType.Text)]
+        [Column(TypeName = "NVARCHAR(450)")]
+        [StringLength(450)]
+        [Display(Name = "ID de l'utilisateur")]
+        public string? UtilisateurId { get; set; }
+
+        [ForeignKey(nameof(UtilisateurId))]
+        public Utilisateur Utilisateur { get; set; }
     }
 }

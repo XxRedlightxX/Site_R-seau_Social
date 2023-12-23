@@ -15,6 +15,6 @@ namespace CrossConvo.Models
         [Display(Name = "Nom du groupe")]
         public string Nom { get; set; }
 
-        public virtual ICollection<Utilisateur>? Utilisateurs { get; set; }
+        public ICollection<Utilisateur>? Utilisateurs { get; set; }
     }
 }

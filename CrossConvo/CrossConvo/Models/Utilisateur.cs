@@ -5,8 +5,6 @@ namespace CrossConvo.Models
 {
     public class Utilisateur : IdentityUser
     {
-        public int UtilisateurId { get; set; }
-
         [Required(ErrorMessage = "Veuillez entrer votre nom")]
         [DataType(DataType.Text)]
         [Column(TypeName = "VARCHAR")]
@@ -22,11 +20,11 @@ namespace CrossConvo.Models
         public string Prenom { get; set; }
 
         public int? GroupeId { get; set; }
-        public virtual Groupe Groupe { get; set; }
+        public Groupe Groupe { get; set; }
 
-        public virtual ICollection<Ami>? Amis { get; set; }
-        public virtual ICollection<Post>? Posts { get; set; }
+        public ICollection<Ami>? Amis { get; set; }
+        public ICollection<Post>? Posts { get; set; }
 
-        public virtual ICollection<Commentaire>? Commentaires { get; set; }
+        public ICollection<Commentaire>? Commentaires { get; set; }
     }
 }

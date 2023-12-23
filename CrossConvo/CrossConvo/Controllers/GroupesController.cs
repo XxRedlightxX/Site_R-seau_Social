@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
 
-namespace CrossConvoApp.Controllers
+namespace CrossConvo.Controllers
 {
     public class GroupesController : Controller
     {
@@ -21,9 +21,9 @@ namespace CrossConvoApp.Controllers
         // GET: Groupes
         public async Task<IActionResult> Index()
         {
-            return _context.Groupes != null ?
-                        View(await _context.Groupes.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.Groupes'  is null.");
+              return _context.Groupes != null ? 
+                          View(await _context.Groupes.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Groupes'  is null.");
         }
 
         // GET: Groupes/Details/5
@@ -149,14 +149,14 @@ namespace CrossConvoApp.Controllers
             {
                 _context.Groupes.Remove(groupe);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GroupeExists(int id)
         {
-            return (_context.Groupes?.Any(e => e.GroupeId == id)).GetValueOrDefault();
+          return (_context.Groupes?.Any(e => e.GroupeId == id)).GetValueOrDefault();
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
 
-namespace CrossConvoApp.Controllers
+namespace CrossConvo.Controllers
 {
     public class PostsController : Controller
     {
@@ -47,7 +47,7 @@ namespace CrossConvoApp.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email");
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,PublicationDate,UtilisateurId,Contenu,Likes")] Post post)
+        public async Task<IActionResult> Create([Bind("PostId,Title,PublicationDate,Contenu,Likes,File,UtilisateurId")] Post post)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace CrossConvoApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", post.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", post.UtilisateurId);
             return View(post);
         }
 
@@ -81,7 +81,7 @@ namespace CrossConvoApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", post.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", post.UtilisateurId);
             return View(post);
         }
 
@@ -90,7 +90,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,PublicationDate,UtilisateurId,Contenu,Likes")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,PublicationDate,Contenu,Likes,File,UtilisateurId")] Post post)
         {
             if (id != post.PostId)
             {
@@ -117,7 +117,7 @@ namespace CrossConvoApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", post.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", post.UtilisateurId);
             return View(post);
         }
 
@@ -154,14 +154,14 @@ namespace CrossConvoApp.Controllers
             {
                 _context.Posts.Remove(post);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PostExists(int id)
         {
-            return (_context.Posts?.Any(e => e.PostId == id)).GetValueOrDefault();
+          return (_context.Posts?.Any(e => e.PostId == id)).GetValueOrDefault();
         }
     }
 }

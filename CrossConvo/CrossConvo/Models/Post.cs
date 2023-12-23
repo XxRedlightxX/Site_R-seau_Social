@@ -18,10 +18,6 @@ namespace CrossConvo.Models
         [Display(Name = "Date de publication")]
         public DateTime? PublicationDate { get; set; }
 
-        [ForeignKey("Utilisateur")]
-        public string UtilisateurId { get; set; }
-
-        public virtual Utilisateur? Utilisateur { get; set; }
 
         public string? Contenu { get; set; }
 
@@ -33,6 +29,15 @@ namespace CrossConvo.Models
 
         public ICollection<Commentaire>? Commentaires { get; set; }
 
+        [Required(ErrorMessage = "Veuillez entrer votre ID d'utilisateur")]
+        [DataType(DataType.Text)]
+        [Column(TypeName = "NVARCHAR(450)")]
+        [StringLength(450)]
+        [Display(Name = "ID de l'utilisateur")]
+        public string? UtilisateurId { get; set; }
+
+        [ForeignKey(nameof(UtilisateurId))]
+        public Utilisateur Utilisateur { get; set; }
 
         [NotMapped]
         public ICollection<string> LikedUserIds { get; set; } = new List<string>();
@@ -46,7 +51,6 @@ namespace CrossConvo.Models
             }
         }
 
-        // Method to decrement likes for the current user
         public void DecrementLikes(string userId)
         {
             if (LikedUserIds.Contains(userId))

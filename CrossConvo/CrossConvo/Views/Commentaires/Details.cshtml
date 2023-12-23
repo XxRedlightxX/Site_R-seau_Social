@@ -6,42 +6,41 @@
 <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 <script src="~/js/switch_theme.js"></script>
-
 <h1>Details</h1>
 
 <div>
     <h4>Commentaire</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PublicationDate)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PublicationDate)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Contenu)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Contenu)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Utilisateur)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Utilisateur.Nom)
-        </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Post)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Post.Title)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Likes)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Likes)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Utilisateur)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Utilisateur.Id)
         </dd>
     </dl>
 </div>

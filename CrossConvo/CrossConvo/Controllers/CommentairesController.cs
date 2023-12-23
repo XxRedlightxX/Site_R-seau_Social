@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
 
-namespace CrossConvoApp.Controllers
+namespace CrossConvo.Controllers
 {
     public class CommentairesController : Controller
     {
@@ -49,7 +49,7 @@ namespace CrossConvoApp.Controllers
         public IActionResult Create()
         {
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Title");
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email");
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentaireId,PublicationDate,Contenu,UtilisateurId,PostId,Likes")] Commentaire commentaire)
+        public async Task<IActionResult> Create([Bind("CommentaireId,PublicationDate,Contenu,PostId,Likes,UtilisateurId")] Commentaire commentaire)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace CrossConvoApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Title", commentaire.PostId);
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", commentaire.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", commentaire.UtilisateurId);
             return View(commentaire);
         }
 
@@ -85,7 +85,7 @@ namespace CrossConvoApp.Controllers
                 return NotFound();
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Title", commentaire.PostId);
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", commentaire.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", commentaire.UtilisateurId);
             return View(commentaire);
         }
 
@@ -94,7 +94,7 @@ namespace CrossConvoApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommentaireId,PublicationDate,Contenu,UtilisateurId,PostId,Likes")] Commentaire commentaire)
+        public async Task<IActionResult> Edit(int id, [Bind("CommentaireId,PublicationDate,Contenu,PostId,Likes,UtilisateurId")] Commentaire commentaire)
         {
             if (id != commentaire.CommentaireId)
             {
@@ -122,7 +122,7 @@ namespace CrossConvoApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Title", commentaire.PostId);
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", commentaire.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", commentaire.UtilisateurId);
             return View(commentaire);
         }
 
@@ -160,14 +160,14 @@ namespace CrossConvoApp.Controllers
             {
                 _context.Commentaires.Remove(commentaire);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentaireExists(int id)
         {
-            return (_context.Commentaires?.Any(e => e.CommentaireId == id)).GetValueOrDefault();
+          return (_context.Commentaires?.Any(e => e.CommentaireId == id)).GetValueOrDefault();
         }
     }
 }

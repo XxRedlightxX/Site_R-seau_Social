@@ -6,44 +6,32 @@
 <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 <script src="~/js/switch_theme.js"></script>
+<h1>Index</h1>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-
-
-</head>
-<body>
-
-    <h1>Index</h1>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-
-    <h1>Recherche</h1>
-
-    <form asp-controller="Utilisateurs" asp-action="Search" method="POST">
-        <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
-        <input type="submit" value="Rechercher" />
-    </form>
-
-    <div class="entity-container">
-        @foreach (var item in Model)
-        {
-            <div class="entity-card">
-                @Html.DisplayFor(modelItem => item.GroupeId)<br />
-                Nom du groupe: @Html.DisplayFor(modelItem => item.Nom)<br />
-                <div>
-                    <a asp-action="Edit" asp-route-id="@item.GroupeId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.GroupeId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GroupeId">Delete</a>
-                </div>
-            </div>
-        }
-    </div>
-
-</body>
-</html>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nom)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nom)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.GroupeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.GroupeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.GroupeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

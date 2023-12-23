@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 <script src="~/js/switch_theme.js"></script>
-
 <h1>Edit</h1>
 
 <h4>Ami</h4>
@@ -53,7 +52,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

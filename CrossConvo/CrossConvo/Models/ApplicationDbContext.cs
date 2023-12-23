@@ -17,7 +17,7 @@ namespace CrossConvo.Models
         public DbSet<Post> Posts { get; set; }
         public DbSet<Commentaire> Commentaires { get; set; }
 
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -29,10 +29,8 @@ namespace CrossConvo.Models
                 .OnDelete(DeleteBehavior.ClientNoAction);
 
             modelBuilder.Entity<Ami>()
-                .HasOne(ami => ami.Utilisateur)
-                .WithMany(u => u.Amis)
-                .HasForeignKey(ami => ami.UtilisateurId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .Property(a => a.UtilisateurId)
+                .IsRequired(false);
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Utilisateur)
@@ -46,6 +44,7 @@ namespace CrossConvo.Models
                 .HasForeignKey(u => u.GroupeId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        
 
         public void SeedData()
         {

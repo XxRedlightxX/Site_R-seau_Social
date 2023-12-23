@@ -52,7 +52,12 @@
                         <p>@post.Contenu</p>
                         <p>Published on: @post.PublicationDate</p>
                         <p>Likes: @post.Likes</p>
-
+                        @if (post.File != null && post.File.Length > 0)
+                        {
+                            <p>
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(post.File)" alt="Post Image" class="img-thumbnail" />
+                            </p>
+                        }
                         @if (SignInManager.IsSignedIn(User))
                         {
                             if (post.LikedUserIds.Contains(Model.Id))

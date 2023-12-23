@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
 
-namespace CrossConvoApp.Controllers
+namespace CrossConvo.Controllers
 {
     public class AmisController : Controller
     {
@@ -47,7 +47,7 @@ namespace CrossConvoApp.Controllers
         // GET: Amis/Create
         public IActionResult Create()
         {
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email");
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace CrossConvoApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", ami.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", ami.UtilisateurId);
             return View(ami);
         }
 
@@ -81,7 +81,7 @@ namespace CrossConvoApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", ami.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", ami.UtilisateurId);
             return View(ami);
         }
 
@@ -117,7 +117,7 @@ namespace CrossConvoApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "UtilisateurId", "Email", ami.UtilisateurId);
+            ViewData["UtilisateurId"] = new SelectList(_context.Utilisateurs, "Id", "Id", ami.UtilisateurId);
             return View(ami);
         }
 
@@ -154,14 +154,14 @@ namespace CrossConvoApp.Controllers
             {
                 _context.Amis.Remove(ami);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AmiExists(int id)
         {
-            return (_context.Amis?.Any(e => e.idAmi == id)).GetValueOrDefault();
+          return (_context.Amis?.Any(e => e.idAmi == id)).GetValueOrDefault();
         }
     }
 }
