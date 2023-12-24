@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using NuGet.Packaging;
 
 namespace CrossConvoApp.Controllers
 {
@@ -66,34 +67,35 @@ namespace CrossConvoApp.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> IncrementLikes(int postId)
+        [HttpPost]
+        public async Task<IActionResult> ToggleLike([FromForm] int postId, [FromForm] bool like)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var post = await _context.Posts.FindAsync(postId);
 
-            if (post != null && _signInManager.IsSignedIn(User))
+            if (post != null)
             {
-                var currentUser = await _userManager.GetUserAsync(User);
-                post.IncrementLikes(currentUser.Id);
+                var userHasLiked = post.LikedUserIds.Any(id => id == userId);
+                if (like && !userHasLiked)
+                {
+                    post.Likes++;
+                    post.LikedUserIds.Add(userId);
+                }
+                else if (!like && userHasLiked)
+                {
+                    post.Likes--;
+                    post.LikedUserIds.Remove(userId);
+                }
+
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Profil");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DecrementLikes(int postId)
-        {
-            var post = await _context.Posts.FindAsync(postId);
-
-            if (post != null && _signInManager.IsSignedIn(User))
-            {
-                var currentUser = await _userManager.GetUserAsync(User);
-                post.DecrementLikes(currentUser.Id);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("Profil");
+            return RedirectToAction("ExplorerPage", "Home");
         }
 
 

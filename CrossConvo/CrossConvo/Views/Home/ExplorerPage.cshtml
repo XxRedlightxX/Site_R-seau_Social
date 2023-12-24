@@ -49,14 +49,22 @@
 
                                 @if (SignInManager.IsSignedIn(User))
                                 {
-                                    if (post.LikedUserIds.Contains(user.Id))
-                                    {
-                                        <i class="far fa-heart icon11"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="far fa-heart icon111"></i>
-                                    }
+                                    <form id="likeForm_@post.PostId" method="post" action="@Url.Action("ToggleLike", "Home")">
+                                        @if (post.LikedUserIds.Contains(user.Id))
+                                        {
+                                            <i class="far fa-heart icon11"></i>
+                                            <input type="hidden" name="like" value="false" />
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-heart icon111"></i>
+                                            <input type="hidden" name="like" value="true" />
+                                        }
+
+                                        <input type="hidden" name="postId" value="@post.PostId" />
+
+                                        <button type="submit" class="btn btn-link">Like</button>
+                                    </form>
                                 }
 
                                 @if (post.File != null && post.File.Length > 0)
