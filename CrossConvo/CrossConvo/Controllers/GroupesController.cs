@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CrossConvo.Models;
+using System.Diagnostics;
 
 namespace CrossConvo.Controllers
 {
@@ -157,6 +158,20 @@ namespace CrossConvo.Controllers
         private bool GroupeExists(int id)
         {
           return (_context.Groupes?.Any(e => e.GroupeId == id)).GetValueOrDefault();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Search(string searchName)
+        {
+            // Recherche des livres en fonction du nom du livre ou de la catégorie
+            var result = await _context.Utilisateurs.Where(p => p.Nom.Contains(searchName) || p.Groupe.Nom.Contains(searchName)).ToListAsync();
+            return View("GroupeSearch", result);
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
