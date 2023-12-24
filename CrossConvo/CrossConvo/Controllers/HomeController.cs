@@ -137,14 +137,14 @@ namespace CrossConvoApp.Controllers
             {
                 if (!User.Identity.IsAuthenticated)
                 {
-                    return Json(new { success = false, error = "User not authenticated" });
+                    return Json(new { success = false, error = "Authentifiez vous" });
                 }
 
                 var currentUser = await _userManager.GetUserAsync(User);
 
                 if (userId == currentUser.Id)
                 {
-                    return Json(new { success = false, error = "Cannot add yourself as a friend" });
+                    return Json(new { success = false, error = "Vous ne pouvez pas vous ajouter comme ami" });
                 }
 
                 var friendUser = await _userManager.FindByIdAsync(userId);
@@ -200,7 +200,7 @@ namespace CrossConvoApp.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, error = "User is already a friend" });
+                    return Json(new { success = false, error = "Cette utilisateur est déja votre ami" });
                 }
             }
             catch (Exception ex)
