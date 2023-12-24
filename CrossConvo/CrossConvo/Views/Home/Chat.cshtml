@@ -49,13 +49,14 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Chat with your friends</h1>
+        <h1>Chat avec tes amis</h1>
 
         <div id="chat-container" class="chat-container"></div>
 
         <form method="post">
             <div class="form-group">
-                <label for="friend">Choose your friend:</label>
+                <label for="friend">Choisi ton ami
+                </label>
                 <select class="form-control" name="friendId" id="friend">
                     @foreach (var friend in Model)
                     {
@@ -74,7 +75,7 @@
 
         @if (Model == null || Model.Count == 0)
         {
-            <p>You have no friends.</p>
+            <p>Vous avez 0 amis.</p>
         }
     </div>
 </body>
