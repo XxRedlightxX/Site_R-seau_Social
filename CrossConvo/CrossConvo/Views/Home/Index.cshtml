@@ -1,7 +1,12 @@
 ﻿﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<Utilisateur> SignInManager
+@inject UserManager<Utilisateur> UserManager
+
+@model CrossConvo.Models.Utilisateur
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +19,9 @@
     <div class="theme-bouton">
         <button class="theme" onclick="changerCouleurTheme()"><i class="fas fa-sun" id="theme-icon"></i></button>
     </div>
-
+    @if (SignInManager.IsSignedIn(User))
+    {
+       <h1> <strong>Hello @UserManager.GetUserName(User)!</strong></h1>
     <div class="row">
         <div class="col-md-6">
             <h3>CHAT N'IMPORTE OÙ, LÀ OÙ TU VEUX, AVEC <span style="color: #f33722;">CrossConvo.</span></h3>
@@ -24,38 +31,86 @@
             <img src="~/img/home/logo.png" style="height: 140px; " class="" alt="logo">
         </div>
     </div>
+   
+    
+        
 
 
-    <a class="bouton-plus" asp-controller="Home" asp-action="ExplorerPage">Voir plus</a>
+        <a class="bouton-plus" asp-controller="Home" asp-action="ExplorerPage">Voir plus</a>
 
-    <h2 style="text-align: center; font-weight: bold; padding-top: 100px">VOUS POUVEZ</h2>
-    <div class="row" style="padding-top: 20px">
-        <div class="col-md-4">
-            <i class="fas fa-comment icon1"></i>
-            <i class="far fa-heart icon11"></i>
-            <p>Commenter et répondre aux publications des autres. Montrer vos appréciations dans des publications</p>
+        <h2 style="text-align: center; font-weight: bold; padding-top: 100px">VOUS POUVEZ</h2>
+        <div class="row" style="padding-top: 20px">
+            <div class="col-md-4">
+                <i class="fas fa-comment icon1"></i>
+                <i class="far fa-heart icon11"></i>
+                <p>Commenter et répondre aux publications des autres. Montrer vos appréciations dans des publications</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-user-friends icon2"></i>
+                <p>Se connecter avec d'autres personnes en ligne en les ajoutant comme amis et les contacter</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-share-square icon3"></i>
+                <p>Publier du texte, des images, des vidéos pour mettre à jour vos amis ou abonnés</p>
+            </div>
         </div>
-        <div class="col-md-4">
-            <i class="fas fa-user-friends icon2"></i>
-            <p>Se connecter avec d'autres personnes en ligne en les ajoutant comme amis et les contacter</p>
+        <hr>
+        <div style="padding-top: 40px; padding-bottom: 40px;">
+            <img src="~/img/home/personne3.png" class="image1" style="width: 70%; margin: 0 auto; display: block;" alt="Personne text">
         </div>
-        <div class="col-md-4">
-            <i class="fas fa-share-square icon3"></i>
-            <p>Publier du texte, des images, des vidéos pour mettre à jour vos amis ou abonnés</p>
-        </div>
-    </div>
-    <hr>
-    <div style="padding-top: 40px; padding-bottom: 40px;">
-        <img src="~/img/home/personne3.png" class="image1" style="width: 70%; margin: 0 auto; display: block;" alt="Personne text">
-    </div>
 
-    <div>
-        <p>
-            CrossConvo révolutionne la communication et la collaboration en éliminant les barrières géographiques.
-            Cette plateforme polyvalente offre une interface intuitive, des fonctionnalités robustes, des réunions virtuelles,
-            une messagerie instantanée et la gestion de projets, adaptée à tous.
-        </p>
-    </div>
-    <hr>
+        <div>
+            <p>
+                CrossConvo révolutionne la communication et la collaboration en éliminant les barrières géographiques.
+                Cette plateforme polyvalente offre une interface intuitive, des fonctionnalités robustes, des réunions virtuelles,
+                une messagerie instantanée et la gestion de projets, adaptée à tous.
+            </p>
+        </div>
+        <hr>
+    }else
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <h3>CHAT N'IMPORTE OÙ, LÀ OÙ TU VEUX, AVEC <span style="color: #f33722;">CrossConvo.</span></h3>
+                <h5><span style="color:#017878;">Une plateforme polyvalente pour la communication et la collaboration</span></h5>
+            </div>
+            <div class="col-md-3 image">
+                <img src="~/img/home/logo.png" style="height: 140px; " class="" alt="logo">
+            </div>
+        </div>
+
+        <a class="bouton-plus" asp-controller="Home" asp-action="ExplorerPage">Voir plus</a>
+
+        <h2 style="text-align: center; font-weight: bold; padding-top: 100px">VOUS POUVEZ</h2>
+        <div class="row" style="padding-top: 20px">
+            <div class="col-md-4">
+                <i class="fas fa-comment icon1"></i>
+                <i class="far fa-heart icon11"></i>
+                <p>Commenter et répondre aux publications des autres. Montrer vos appréciations dans des publications</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-user-friends icon2"></i>
+                <p>Se connecter avec d'autres personnes en ligne en les ajoutant comme amis et les contacter</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-share-square icon3"></i>
+                <p>Publier du texte, des images, des vidéos pour mettre à jour vos amis ou abonnés</p>
+            </div>
+        </div>
+        <hr>
+        <div style="padding-top: 40px; padding-bottom: 40px;">
+            <img src="~/img/home/personne3.png" class="image1" style="width: 70%; margin: 0 auto; display: block;" alt="Personne text">
+        </div>
+
+        <div>
+            <p>
+                CrossConvo révolutionne la communication et la collaboration en éliminant les barrières géographiques.
+                Cette plateforme polyvalente offre une interface intuitive, des fonctionnalités robustes, des réunions virtuelles,
+                une messagerie instantanée et la gestion de projets, adaptée à tous.
+            </p>
+        </div>
+        <hr>
+        
+    }
 </body>
 </html>

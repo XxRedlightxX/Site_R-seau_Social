@@ -36,9 +36,21 @@
     {
         <p>Hello @UserManager.GetUserName(User)!</p>
         <p>
-            <strong>Nom de l'utilisateur:</strong> @Html.DisplayFor(model => model.Nom)
+            <h2><strong>Nom de l'utilisateur:</strong> @Html.DisplayFor(model => model.Nom)</h2>
         </p>
-
+        <p>Votre liste d'amis est :</p>
+        @if (Model.Amis != null && Model.Amis.Any())
+            @foreach (var ami in Model.Amis)
+            {
+                <strong>@Html.DisplayFor(modelItem => ami.Nom)</strong>
+                <strong>@Html.DisplayFor(modelItem => ami.Prenom)</strong>
+                <p>@Html.DisplayFor(modelItem => ami.Email)</p>
+                <br />
+            }
+        else
+        {
+            <p>Aucun ami .</p>
+        }
         <h2>VOS POSTS</h2>
         <i class="fas fa-plus icon_ajout" data-toggle="modal" data-target="#addPostModal"></i>
 
@@ -111,7 +123,20 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
+                <div class="">
+
+                   
+
+                </div>
             </div>
+            <div class="">
+         
+            
+
+                    
+                        
+            
+                   
         </div>
     </div>
 

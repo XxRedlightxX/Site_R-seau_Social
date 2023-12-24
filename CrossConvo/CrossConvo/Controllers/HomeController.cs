@@ -57,6 +57,7 @@ namespace CrossConvoApp.Controllers
 
                 var userWithPosts = await _context.Utilisateurs
                     .Include(u => u.Posts)
+                    .Include(u => u.Amis)
                     .FirstOrDefaultAsync(u => u.Id == currentUser.Id);
 
                 return View(userWithPosts);
@@ -66,6 +67,8 @@ namespace CrossConvoApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
+       
 
         [HttpPost]
         public async Task<IActionResult> ToggleLike([FromForm] int postId, [FromForm] bool like)
