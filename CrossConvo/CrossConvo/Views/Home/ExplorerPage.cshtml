@@ -16,6 +16,7 @@
 </head>
 <body>
 
+    <h2>Chercher par groupe</h2>
     <form asp-controller="Groupes" asp-action="Search" method="POST">
         <input type="text" name="searchName" id="searchName" placeholder="Rechercher..." />
         <input type="submit" value="Rechercher" />
@@ -25,8 +26,8 @@
         @foreach (var user in Model)
         {
             <div class="entity-card">
-                <strong>@Html.DisplayFor(modelItem => user.Nom) @Html.DisplayFor(modelItem => user.Prenom)</strong><br />
-                <strong>@Html.DisplayFor(modelItem => user.Email)</strong>
+                <strong>Prenom: @Html.DisplayFor(modelItem => user.Nom) @Html.DisplayFor(modelItem => user.Prenom)</strong><br />
+                <strong>Email: @Html.DisplayFor(modelItem => user.Email)</strong>
                 <form id="addFriendForm" method="post" action="/Home/AddFriend">
                     @Html.AntiForgeryToken() 
                     <input type="hidden" name="userId" id="friendUserId" value="@user.Id" />  
@@ -41,10 +42,10 @@
                         @foreach (var post in user.Posts)
                         {
                             <div class="post">
-                                <strong>@Html.DisplayFor(modelItem => post.Title)</strong><br />
+                                <strong>Titre: @Html.DisplayFor(modelItem => post.Title)</strong><br />
                                 <strong>@Html.DisplayFor(modelItem => post.Contenu)</strong><br />
-                                <strong>@Html.DisplayFor(modelItem => post.Utilisateur.Nom)</strong><br />
-                                <strong>@Html.DisplayFor(modelItem => post.Utilisateur.Email)</strong><br />
+                                <strong>Nom: @Html.DisplayFor(modelItem => post.Utilisateur.Nom)</strong><br />
+                                <strong>Email: @Html.DisplayFor(modelItem => post.Utilisateur.Email)</strong><br />
                                 <strong>Likes: @Html.DisplayFor(modelItem => post.Likes)</strong><br />
 
                                 @if (SignInManager.IsSignedIn(User))
@@ -90,10 +91,10 @@
                                         @foreach (var comment in post.Commentaires)
                                         {
                                             <div class="comment" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
-                                                <strong>@Html.DisplayFor(modelItem => comment.Utilisateur.Email)</strong><br />
-                                                <strong>@Html.DisplayFor(modelItem => comment.Utilisateur.Nom)</strong><br />
-                                                <strong>@Html.DisplayFor(modelItem => comment.PublicationDate)</strong><br />
-                                                <strong>@Html.DisplayFor(modelItem => comment.Contenu)</strong><br />
+                                                <strong>Email: @Html.DisplayFor(modelItem => comment.Utilisateur.Email)</strong><br />
+                                                <strong>Nom: @Html.DisplayFor(modelItem => comment.Utilisateur.Nom)</strong><br />
+                                                <strong>Date: @Html.DisplayFor(modelItem => comment.PublicationDate)</strong><br />
+                                                <strong>Contenu: @Html.DisplayFor(modelItem => comment.Contenu)</strong><br />
                                             </div>
                                         }
                                     }

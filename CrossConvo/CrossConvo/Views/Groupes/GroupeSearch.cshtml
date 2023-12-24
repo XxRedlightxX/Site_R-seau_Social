@@ -25,59 +25,15 @@
         @foreach (var user in Model)
         {
             <div class="entity-card">
-                <strong>@Html.DisplayFor(modelItem => user.Nom) @Html.DisplayFor(modelItem => user.Prenom)</strong><br />
-                <strong>@Html.DisplayFor(modelItem => user.Email)</strong>
+                <strong>Nom: @Html.DisplayFor(modelItem => user.Nom) Prenom: @Html.DisplayFor(modelItem => user.Prenom)</strong><br />
+                <strong>Email: @Html.DisplayFor(modelItem => user.Email)</strong>
                 <form id="addFriendForm" method="post" action="/Home/AddFriend">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="userId" id="friendUserId" value="@user.Id" />
                     <div>
                         <button type="submit" class="fas fa-plus icon_ajout add-friend"></button>
                     </div>
-                </form>
-
-                @if (user.Posts != null && user.Posts.Any())
-                {
-                    <div class="post-container">
-                        @foreach (var post in user.Posts)
-                        {
-                            <div class="post">
-                                <strong>@Html.DisplayFor(modelItem => post.Title)</strong><br />
-                                <strong>@Html.DisplayFor(modelItem => post.Contenu)</strong><br />
-                                <strong>@Html.DisplayFor(modelItem => post.Utilisateur.Nom)</strong><br />
-                                <strong>@Html.DisplayFor(modelItem => post.Utilisateur.Email)</strong><br />
-                                <strong>Likes: @Html.DisplayFor(modelItem => post.Likes)</strong><br />
-
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    <form id="likeForm_@post.PostId" method="post" action="@Url.Action("ToggleLike", "Home")">
-                                        @if (post.LikedUserIds.Contains(user.Id))
-                                        {
-                                            <i class="far fa-heart icon11"></i>
-                                            <input type="hidden" name="like" value="false" />
-                                        }
-                                        else
-                                        {
-                                            <i class="far fa-heart icon111"></i>
-                                            <input type="hidden" name="like" value="true" />
-                                        }
-
-                                        <input type="hidden" name="postId" value="@post.PostId" />
-
-                                        <button type="submit" class="btn btn-link">Like</button>
-                                    </form>
-                                }
-
-                               
-                                
-                                </div>
-                            
-                        }
-                    </div>
-                }
-                else
-                {
-                    <p>Cette utilisateur a 0 post.</p>
-                }
+                </form>              
             </div>
         }
     </div>

@@ -168,16 +168,31 @@ namespace CrossConvoApp.Controllers
                     };
 
                     currentUser.Amis.Add(newAmi);
-                    var updateResult = await _userManager.UpdateAsync(currentUser);
 
-                    if (updateResult.Succeeded)
+                    var reverseAmi = new Ami
+                    {
+                        Nom = currentUser.Nom,
+                        Prenom = currentUser.Prenom,
+                        Username = currentUser.UserName,
+                        Email = currentUser.Email,
+                        UtilisateurId = currentUser.Id
+                    };
+
+                    friendUser.Amis ??= new List<Ami>();
+                    friendUser.Amis.Add(reverseAmi);
+
+                    var updateResultCurrentUser = await _userManager.UpdateAsync(currentUser);
+                    var updateResultFriendUser = await _userManager.UpdateAsync(friendUser);
+
+                    if (updateResultCurrentUser.Succeeded && updateResultFriendUser.Succeeded)
                     {
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        var errors = string.Join(", ", updateResult.Errors.Select(e => e.Description));
-                        return Json(new { success = false, error = $"Failed to update user: {errors}" });
+                        var errorsCurrentUser = string.Join(", ", updateResultCurrentUser.Errors.Select(e => e.Description));
+                        var errorsFriendUser = string.Join(", ", updateResultFriendUser.Errors.Select(e => e.Description));
+                        return Json(new { success = false, error = $"Failed to update users: {errorsCurrentUser}, {errorsFriendUser}" });
                     }
                 }
                 else
@@ -235,6 +250,38 @@ namespace CrossConvoApp.Controllers
             }
         }
 
-        
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Chat()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            await _context.Entry(currentUser).Collection(u => u.Amis).LoadAsync();
+
+            return View(currentUser.Amis);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string friendId, string message)
+        {
+            if (string.IsNullOrEmpty(friendId) || string.IsNullOrEmpty(message))
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
