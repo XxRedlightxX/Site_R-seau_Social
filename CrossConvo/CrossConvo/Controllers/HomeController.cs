@@ -45,7 +45,7 @@ namespace CrossConvoApp.Controllers
 
         public async Task<IActionResult> ExplorerPage()
         {
-            var utilisateurs = await _context.Utilisateurs.Include(u => u.Posts).ToListAsync();
+            var utilisateurs = await _context.Utilisateurs.Include(u => u.Posts).ThenInclude(p => p.Commentaires).ToListAsync();
             return View(utilisateurs);
         }
 
@@ -188,6 +188,50 @@ namespace CrossConvoApp.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int postId, string contenuCommentaire)
+        {
+            try
+            {
+                // Input validation
+                if (postId <= 0 || string.IsNullOrWhiteSpace(contenuCommentaire))
+                {
+                    return RedirectToAction("ExplorerPage", "Home");
+                }
+
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var post = await _context.Posts.Include(p => p.Commentaires).FirstOrDefaultAsync(p => p.PostId == postId);
+
+                if (post != null)
+                {
+                    var commentaire = new Commentaire
+                    {
+                        PublicationDate = DateTime.Now,
+                        Contenu = contenuCommentaire.Trim(),
+                        UtilisateurId = userId,
+                        Likes = 0,
+                        PostId = postId
+                    };
+
+                    post.Commentaires.Add(commentaire);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("ExplorerPage", "Home", new { postId = postId });
+                }
+
+                return RedirectToAction("ExplorerPage", "Home");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("ExplorerPage", "Home");
             }
         }
 

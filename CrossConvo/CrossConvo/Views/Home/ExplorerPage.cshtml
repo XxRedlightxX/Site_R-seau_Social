@@ -74,20 +74,34 @@
                                     </p>
                                 }
 
-                                @if (post.Commentaires != null && post.Commentaires.Any())
-                                {
-                                    <div class="comment-container">
+                               <form id="commentForm_@post.PostId" method="post" action="@Url.Action("AddComment", "Home")" onsubmit="return validateCommentForm()">
+                                    @Html.AntiForgeryToken()
+                                    <textarea name="contenuCommentaire" id="contenuCommentaire" placeholder="Ajouter un commentaire..."></textarea>
+                                    <input type="hidden" name="postId" value="@post.PostId" />
+                                    <button type="submit" class="btn btn-link">Commenter</button>
+                                </form>
+
+                                <button class="btn btn-link view-comments-btn" data-post-id="@post.PostId">Voir les commentaire</button>
+
+                                <!-- Modify the comment-container to include a unique identifier based on the post ID -->
+                                <div class="comment-container" id="comment-container-@post.PostId" style="border: 1px solid #ccc; padding: 10px; display: none;">
+                                    @if (post.Commentaires != null && post.Commentaires.Any())
+                                    {
                                         @foreach (var comment in post.Commentaires)
                                         {
-                                            <div class="comment">
+                                            <div class="comment" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
                                                 <strong>@Html.DisplayFor(modelItem => comment.Utilisateur.Email)</strong><br />
                                                 <strong>@Html.DisplayFor(modelItem => comment.Utilisateur.Nom)</strong><br />
                                                 <strong>@Html.DisplayFor(modelItem => comment.PublicationDate)</strong><br />
                                                 <strong>@Html.DisplayFor(modelItem => comment.Contenu)</strong><br />
                                             </div>
                                         }
-                                    </div>
-                                }
+                                    }
+                                    else
+                                    {
+                                        <p>Ce poste a 0 commentaire</p>
+                                    }
+                                </div>
                             </div>
                         }
                     </div>
@@ -111,11 +125,9 @@
                 data: { userId: userId },
                 success: function (result) {
                     if (result.success) {
-                        // Handle success, e.g., update UI
-                        console.log("Friend added successfully");
+                        console.log("Ami bien ajouté");
                     } else {
-                        // Handle failure, e.g., display error message
-                        console.error("Failed to add friend: " + result.error);
+                        console.error("Erreur pendant l'ajout d'ami: " + result.error);
                     }
                 },
                 error: function () {
@@ -123,6 +135,29 @@
                 }
             });
         });
+
+        function validateCommentForm() {
+        var commentContent = document.getElementById("contenuCommentaire").value.trim();
+        var errorElement = document.getElementById("commentError");
+
+        if (commentContent === "") {
+                errorElement.innerText = "Commentaire peut pas être vite.";
+                return false;
+            } else {
+                errorElement.innerText = "";
+            }
+            return true;
+        }
+
+        $(document).ready(function () {
+        $(".view-comments-btn").click(function () {
+            var postId = $(this).data("post-id");
+            var commentContainer = $("#comment-container-" + postId);
+
+            // Toggle the visibility of the comments container
+            commentContainer.slideToggle();
+        });
+    });
     </script>
 </body>
 </html>

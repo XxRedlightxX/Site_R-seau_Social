@@ -2,12 +2,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'poppins' sans-serif;
+    font-family: 'poppins', sans-serif;
 }
 
 .header {
     display: flex;
     justify-content: flex-start;
+    background-color: #333; /* Set a background color for the header */
+    color: #fff; /* Set text color for the header */
+    padding: 10px;
 }
 
 .container {
@@ -19,24 +22,60 @@
     padding: 50px 8%;
 }
 
-.image {
+/* Style the form */
+form {
+    margin-bottom: 20px;
+}
+
+/* Style the input fields */
+input[type="text"], input[type="submit"] {
+    padding: 10px;
+    margin-right: 10px;
+}
+
+/* Style the entity cards */
+.entity-card {
     border: 1px solid #ccc;
-    padding: 5px;
-    text-align: center;
-    width: 500px;
-    /*width: 100%*/
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #808693;
 }
 
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 30px;
+/* Style the post container */
+.post-container {
+    margin-top: 10px;
 }
 
-    .gallery img {
-        width: 100%;
-    }
+/* Style the posts */
+.post {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #646C7D;
+}
 
-a {
-    text-decoration: none;
+/* Style the comment container */
+.comment-container {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+/* Style the comment */
+.comment {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+/* Style the comment form */
+#commentForm {
+    margin-top: 10px;
+}
+
+/* Style the view comments button */
+.view-comments-btn {
+    cursor: pointer;
+    color: #007bff; /* Set the button color */
+    border: none;
+    background: none;
 }
