@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: CrossConvo
+    buildCommand: |
+      curl -sSL https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-7.0.0-linux-x64-binaries | bash
+      dotnet publish -c Release -o out
+    startCommand: dotnet out/CrossConvo.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
